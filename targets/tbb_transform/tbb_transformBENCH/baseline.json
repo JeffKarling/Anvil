@@ -1,0 +1,9 @@
+{
+  "component": "tbb_transform",
+  "wall_ns_per_op": 29826.970,
+  "cycles_per_op": 50829.980,
+  "instructions_per_op": 40784.070,
+  "ipc": 0.802,
+  "branch_misses_per_op": 42.000,
+  "cache_misses_per_op": 17.750
+}

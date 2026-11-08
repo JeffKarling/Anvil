@@ -1,0 +1,6 @@
+-- 30499866b3914a1c98baac6171bd36bc
+Subject: Unhandled fault caught at tbb_transform boundary firewall
+Defined-By: anvil::tbb_transform
+
+An unhandled exception reached the noexcept boundary of anvil::tbb_transform and was
+intercepted by the Lippincott boundary firewall.

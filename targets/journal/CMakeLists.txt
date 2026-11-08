@@ -1,0 +1,35 @@
+cmake_path(GET CMAKE_CURRENT_LIST_DIR FILENAME DIR_NAME)
+
+add_library(${DIR_NAME} STATIC)
+add_library(${PROJECT_NAME}::${DIR_NAME} ALIAS ${DIR_NAME})
+
+include(${CMAKE_BINARY_DIR}/target_properties.cmake)
+include(${CMAKE_BINARY_DIR}/target_compile_options.cmake)
+
+# Internal implementation utilizes C++23 range views (e.g. std::views::enumerate)
+target_compile_features(${DIR_NAME} PRIVATE cxx_std_23)
+
+target_sources(${DIR_NAME}
+        PRIVATE
+        ${DIR_NAME}.cpp
+        journal_sink.cpp
+        journal_boundary.cpp
+
+        PUBLIC
+        FILE_SET ${DIR_NAME}
+        TYPE HEADERS
+        FILES
+        ${DIR_NAME}/${DIR_NAME}.hpp
+)
+
+# Link GCC libstdc++ experimental library for std::stacktrace support
+target_link_libraries(${DIR_NAME}
+        PRIVATE
+        PkgConfig::libsystemd
+        $<$<CXX_COMPILER_ID:GNU,Clang>:-lstdc++exp>
+)
+
+if(BUILD_TESTING)
+    add_subdirectory(${DIR_NAME}TEST)
+    add_subdirectory(${DIR_NAME}BENCH)
+endif()

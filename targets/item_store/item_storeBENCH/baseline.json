@@ -1,0 +1,9 @@
+{
+  "component": "item_store",
+  "wall_ns_per_op": 1532.449,
+  "cycles_per_op": 2845.730,
+  "instructions_per_op": 10587.125,
+  "ipc": 3.720,
+  "branch_misses_per_op": 0.278,
+  "cache_misses_per_op": 0.424
+}

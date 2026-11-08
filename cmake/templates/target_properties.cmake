@@ -1,0 +1,45 @@
+target_compile_features(${DIR_NAME} PRIVATE cxx_std_20)
+
+set(IWYU_MAPPING_FILE "${CMAKE_SOURCE_DIR}/production_artifacts/iwyu_mappings.imp")
+set(IWYU_ARGS
+        "${IWYU_PATH}$<SEMICOLON>-Xiwyu$<SEMICOLON>--mapping_file=${IWYU_MAPPING_FILE}"
+)
+
+set(CPPCHECK_STD_ARG
+        "$<IF:$<IN_LIST:cxx_std_23,$<TARGET_PROPERTY:${DIR_NAME},COMPILE_FEATURES>>,c++23,c++20>"
+)
+
+set(CPPCHECK_ARGS
+        "cppcheck$<SEMICOLON>--enable=all$<SEMICOLON>--std=${CPPCHECK_STD_ARG}$<SEMICOLON>--inline-suppr$<SEMICOLON>--suppress=missingIncludeSystem$<SEMICOLON>--suppress=unusedStructMember$<SEMICOLON>--suppress=unusedFunction$<SEMICOLON>--suppress=unmatchedSuppression$<SEMICOLON>--suppress=checkersReport$<SEMICOLON>--suppress=*:${CMAKE_BINARY_DIR}/*"
+)
+
+set(IPO_VALUE "OFF")
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported OUTPUT ipo_error)
+
+if(ipo_supported)
+    set(IPO_VALUE "$<$<AND:$<BOOL:${ENABLE_IPO}>,$<OR:$<CONFIG:Release>,$<CONFIG:GNU_Release>,$<CONFIG:Clang_Release>>>:ON>")
+else()
+    message(STATUS "IPO/LTO is not supported by the current compiler toolchain: ${ipo_error}")
+endif()
+
+set(WARNING_AS_ERROR_VALUE "OFF")
+if(ENABLE_WARNING_AS_ERROR)
+    set(WARNING_AS_ERROR_VALUE "$<IF:$<OR:$<CONFIG:Debug>,$<CONFIG:Clang_Debug>,$<CONFIG:GNU_Debug>,$<CONFIG:Clang_Tidy>,$<CONFIG:Clang_UBSan>,$<CONFIG:Clang_MSan>,$<CONFIG:Clang_TSan>,$<CONFIG:Clang_ASan>,$<CONFIG:Clang_LSan>,$<CONFIG:GNU_UBSan>,$<CONFIG:GNU_ASan>>,ON,OFF>")
+endif()
+
+set_target_properties(${DIR_NAME} PROPERTIES
+        POSITION_INDEPENDENT_CODE ON
+        INTERPROCEDURAL_OPTIMIZATION "${IPO_VALUE}"
+
+        CXX_INCLUDE_WHAT_YOU_USE "$<$<AND:$<BOOL:${ENABLE_IWYU}>,$<COMPILE_LANGUAGE:CXX>>:${IWYU_ARGS}>"
+        CXX_CPPCHECK "$<$<AND:$<BOOL:${ENABLE_CPPCHECK}>,$<COMPILE_LANGUAGE:CXX>>:${CPPCHECK_ARGS}>"
+        CXX_CLANG_TIDY "$<$<AND:$<COMPILE_LANG_AND_ID:CXX,Clang>,$<CONFIG:Clang_Tidy>>:clang-tidy;--checks=-*,modernize*,cppcoreguidelines*,bugprone*,clang-analyzer*,concurrency*,google*,readability*,performance*,-modernize-use-trailing-return-type>"
+
+        EXPORT_COMPILE_COMMANDS ON
+        DEBUG_POSTFIX _debug
+        COMPILE_WARNING_AS_ERROR "${WARNING_AS_ERROR_VALUE}"
+        CXX_EXTENSIONS OFF
+        OPTIMIZE_DEPENDENCIES ON
+)

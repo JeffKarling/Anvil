@@ -1,0 +1,6 @@
+-- d4a1b938a84a4cf995125df45d003ae2
+Subject: Unhandled fault caught at item_store boundary firewall
+Defined-By: anvil::item_store
+
+An unhandled exception reached the noexcept boundary of anvil::item_store and was
+intercepted by the Lippincott boundary firewall.

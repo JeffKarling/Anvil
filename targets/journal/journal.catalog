@@ -1,0 +1,13 @@
+# systemd journald message catalog for component: journal
+
+-- 7a1d4f90e3c84a21b5809e41d2a7c001
+Subject: Unhandled exception caught at component boundary
+Defined-By: anvil::journal
+Support: https://github.com/JeffKarling/Target_Layout_Extended
+
+An exception thrown inside a component's private implementation reached a
+noexcept component boundary and was caught by the centralized Lippincott
+handler before it could propagate across CMake targets.
+
+ Inspect the structured CODE_FILE, CODE_LINE, CODE_FUNC, and COMPONENT fields
+in journalctl to identify the exact component boundary and exception message.
