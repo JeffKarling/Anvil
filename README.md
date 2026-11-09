@@ -30,13 +30,11 @@ Good architecture is ultimately applied information theory. By strictly bounding
 * Static analysis tools `clang-tidy`, `cppcheck`, and `include-what-you-use`
 * Profiling tool `perf`
 * Core test discovery framework GoogleTest via CMake or PkgConfig
-* Exemplar libraries in [cmake/dependencies.cmake](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/cmake/dependencies.cmake) for template starter components, including `libsystemd` for `journal` and sample packages `protobuf` and `tbb`
+* Exemplar libraries in [cmake/dependencies.cmake](cmake/dependencies.cmake) for template starter components, including `libsystemd` for `journal` and sample packages `protobuf` and `tbb`
 
 ## Human engineering manual and architectural lineage
 
-Human engineers should read **[MANUAL.md](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/MANUAL.md)** for best practices on directing Anvil inside Google Antigravity. The manual explains how to curate third party libraries, write high level requirements specifications, and collaborate with the orchestrator across Git commits.
-
-To understand the foundational physical layout rules, visit **[Target Layout](https://github.com/JeffKarling/Target_Layout)**. For deep architectural rationale and enterprise patterns, visit the **[Target Layout Extended documentation](https://jeffkarling.github.io/Target_Layout_Extended/)**.
+Read Manual **[MANUAL.md](doc/MANUAL.md)** for best practices on directing Anvil inside Google Antigravity. The manual explains how to curate third party libraries, write high level requirements specifications, and collaborate with the orchestrator across Git commits.
 
 ## License
 
