@@ -318,22 +318,33 @@ namespace anvil::perf_scope {
     ) noexcept -> std::string {
         try {
             std::ostringstream out;
-            out << std::fixed << std::setprecision(2);
-            out << "# Component Benchmark Report (" << baseline.component << ")\n";
-            out << "- Latency (ns/op):      " << evaluation.current_metrics.wall_ns_per_op
-                << " (birth: " << baseline.birth_metrics.wall_ns_per_op
-                << ", speedup: " << evaluation.speedup_ratio << "x)\n";
-            if (evaluation.current_metrics.pmu_counters_active) {
-                out << "- Hardware PMU/op:      cycles=" << evaluation.current_metrics.cycles_per_op
-                    << ", instructions=" << evaluation.current_metrics.instructions_per_op
-                    << ", IPC=" << evaluation.current_metrics.ipc
-                    << ", branch_misses=" << evaluation.current_metrics.branch_misses_per_op
-                    << ", cache_misses=" << evaluation.current_metrics.cache_misses_per_op << "\n";
-            } else {
-                out << "- Hardware PMU/op:      steady_clock fallback active (kernel perf_event_paranoid > 1)\n";
-            }
-            out << "- Bottleneck:           " << evaluation.bottleneck << "\n";
-            out << "- Directive:            " << evaluation.decision << "\n";
+            out << std::fixed << std::setprecision(3);
+            out << "{\n";
+            out << "  \"schema_version\": 1,\n";
+            out << R"(  "component": ")" << baseline.component << "\",\n";
+            out << "  \"speedup_ratio\": " << evaluation.speedup_ratio << ",\n";
+            out << R"(  "bottleneck": ")" << evaluation.bottleneck << "\",\n";
+            out << R"(  "directive": ")" << evaluation.decision << "\",\n";
+            out << "  \"worth_optimizing\": " << (evaluation.worth_optimizing ? "true" : "false") << ",\n";
+            out << "  \"current_metrics\": {\n";
+            out << "    \"wall_ns_per_op\": " << evaluation.current_metrics.wall_ns_per_op << ",\n";
+            out << "    \"cycles_per_op\": " << evaluation.current_metrics.cycles_per_op << ",\n";
+            out << "    \"instructions_per_op\": " << evaluation.current_metrics.instructions_per_op << ",\n";
+            out << "    \"ipc\": " << evaluation.current_metrics.ipc << ",\n";
+            out << "    \"branch_misses_per_op\": " << evaluation.current_metrics.branch_misses_per_op << ",\n";
+            out << "    \"cache_misses_per_op\": " << evaluation.current_metrics.cache_misses_per_op << ",\n";
+            out << "    \"pmu_counters_active\": " << (evaluation.current_metrics.pmu_counters_active ? "true" : "false") << "\n";
+            out << "  },\n";
+            out << "  \"birth_metrics\": {\n";
+            out << "    \"wall_ns_per_op\": " << baseline.birth_metrics.wall_ns_per_op << ",\n";
+            out << "    \"cycles_per_op\": " << baseline.birth_metrics.cycles_per_op << ",\n";
+            out << "    \"instructions_per_op\": " << baseline.birth_metrics.instructions_per_op << ",\n";
+            out << "    \"ipc\": " << baseline.birth_metrics.ipc << ",\n";
+            out << "    \"branch_misses_per_op\": " << baseline.birth_metrics.branch_misses_per_op << ",\n";
+            out << "    \"cache_misses_per_op\": " << baseline.birth_metrics.cache_misses_per_op << ",\n";
+            out << "    \"pmu_counters_active\": " << (baseline.birth_metrics.pmu_counters_active ? "true" : "false") << "\n";
+            out << "  }\n";
+            out << "}\n";
             return out.str();
         } catch (...) {
             (void)jrn::catch_boundary_exception(k_workload_exception);

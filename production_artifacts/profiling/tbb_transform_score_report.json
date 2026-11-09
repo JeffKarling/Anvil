@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "component": "tbb_transform",
+  "speedup_ratio": 1.028,
+  "bottleneck": "unknown_pmu_inactive",
+  "directive": "stop_diminishing_returns",
+  "worth_optimizing": false,
+  "current_metrics": {
+    "wall_ns_per_op": 29009.060,
+    "cycles_per_op": 0.000,
+    "instructions_per_op": 0.000,
+    "ipc": 0.000,
+    "branch_misses_per_op": 0.000,
+    "cache_misses_per_op": 0.000,
+    "pmu_counters_active": false
+  },
+  "birth_metrics": {
+    "wall_ns_per_op": 29826.970,
+    "cycles_per_op": 50829.980,
+    "instructions_per_op": 40784.070,
+    "ipc": 0.802,
+    "branch_misses_per_op": 42.000,
+    "cache_misses_per_op": 17.750,
+    "pmu_counters_active": false
+  }
+}

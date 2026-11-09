@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "component": "journal",
+  "speedup_ratio": 1.297,
+  "bottleneck": "memory_bound",
+  "directive": "continue_optimizing",
+  "worth_optimizing": true,
+  "current_metrics": {
+    "wall_ns_per_op": 190281.565,
+    "cycles_per_op": 9992.655,
+    "instructions_per_op": 19784.560,
+    "ipc": 1.980,
+    "branch_misses_per_op": 0.230,
+    "cache_misses_per_op": 53.585,
+    "pmu_counters_active": true
+  },
+  "birth_metrics": {
+    "wall_ns_per_op": 246755.215,
+    "cycles_per_op": 376387.935,
+    "instructions_per_op": 268963.385,
+    "ipc": 0.715,
+    "branch_misses_per_op": 1.370,
+    "cache_misses_per_op": 189.135,
+    "pmu_counters_active": true
+  }
+}

@@ -62,6 +62,6 @@ compile_commands.json
 .DS_Store
 Thumbs.db
 
-# Generated profiling and diagram artifacts
-/production_artifacts/profiling/
-/production_artifacts/graphviz/
+# Generated profiling artifacts and scratch workspace
+/production_artifacts/profiling/perf/
+/tmp/

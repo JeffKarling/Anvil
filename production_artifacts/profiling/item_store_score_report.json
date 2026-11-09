@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "component": "item_store",
+  "speedup_ratio": 1.091,
+  "bottleneck": "hardware_saturated",
+  "directive": "stop_hardware_saturated",
+  "worth_optimizing": false,
+  "current_metrics": {
+    "wall_ns_per_op": 1405.187,
+    "cycles_per_op": 2570.357,
+    "instructions_per_op": 9344.170,
+    "ipc": 3.635,
+    "branch_misses_per_op": 0.267,
+    "cache_misses_per_op": 1.068,
+    "pmu_counters_active": true
+  },
+  "birth_metrics": {
+    "wall_ns_per_op": 1532.449,
+    "cycles_per_op": 2845.730,
+    "instructions_per_op": 10587.125,
+    "ipc": 3.720,
+    "branch_misses_per_op": 0.278,
+    "cache_misses_per_op": 0.424,
+    "pmu_counters_active": true
+  }
+}

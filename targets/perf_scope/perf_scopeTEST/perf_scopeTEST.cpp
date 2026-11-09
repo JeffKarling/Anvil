@@ -75,5 +75,10 @@ TEST(PerfScopeTest, EvaluatesDiminishingReturnsAndSavesBaseline) {
     EXPECT_FALSE(eval_sat.worth_optimizing);
     EXPECT_EQ(eval_sat.decision, "stop_hardware_saturated");
 
+    auto const json_report = ps::format_performance_report(loaded, eval_sat);
+    EXPECT_NE(json_report.find("\"schema_version\": 1"), std::string::npos);
+    EXPECT_NE(json_report.find("\"component\": \"demo_component\""), std::string::npos);
+    EXPECT_NE(json_report.find("\"directive\": \"stop_hardware_saturated\""), std::string::npos);
+
     std::filesystem::remove(temp_baseline, ec);
 }

@@ -1,0 +1,488 @@
+{
+  "schema_version": 1,
+  "dirty_benchmarks": [],
+  "all_gates_passed": true,
+  "invariant_gates": {
+    "H1_acyclicity": {
+      "passed": true,
+      "cycle_targets": []
+    },
+    "H2_anchor_preservation": {
+      "passed": true,
+      "missing_anchors": []
+    },
+    "H3_execution_verification_parity": {
+      "passed": true,
+      "violations": []
+    },
+    "H4_compiler_regime_and_insulation": {
+      "passed": true,
+      "violations": []
+    },
+    "H5_context_locality": {
+      "passed": true,
+      "violations": []
+    }
+  },
+  "partition_friction": {
+    "phi_total": 256.2,
+    "c_scaffold": 70.0,
+    "c_waste": 164.28,
+    "c_blast": 10.5,
+    "c_insulate": 11.42
+  },
+  "approved_palette": {
+    "libsystemd": {
+      "imported_target": "PkgConfig::libsystemd",
+      "required": false,
+      "toxicity": 0.25
+    },
+    "protobuf": {
+      "imported_target": "PkgConfig::protobuf",
+      "required": false,
+      "toxicity": 0.85
+    },
+    "tbb": {
+      "imported_target": "PkgConfig::tbb",
+      "required": false,
+      "toxicity": 0.65
+    },
+    "zstd": {
+      "imported_target": "PkgConfig::zstd",
+      "required": false,
+      "toxicity": 0.2
+    },
+    "sqlite3": {
+      "imported_target": "PkgConfig::sqlite3",
+      "required": false,
+      "toxicity": 0.25
+    },
+    "xxhash": {
+      "imported_target": "PkgConfig::xxhash",
+      "required": false,
+      "toxicity": 0.15
+    },
+    "liburing": {
+      "imported_target": "PkgConfig::liburing",
+      "required": false,
+      "toxicity": 0.3
+    },
+    "curl": {
+      "imported_target": "PkgConfig::curl",
+      "required": false,
+      "toxicity": 0.45
+    },
+    "eigen3": {
+      "imported_target": "PkgConfig::eigen3",
+      "required": false,
+      "toxicity": 0.9
+    },
+    "OpenSSL": {
+      "imported_target": "OpenSSL",
+      "required": false,
+      "toxicity": 0.6
+    }
+  },
+  "targets": {
+    "app": {
+      "target_type": "executable",
+      "is_anchor": true,
+      "execution_nature": "entrypoint",
+      "has_test": false,
+      "has_benchmark": false,
+      "compiler_regime": [
+        "cxx_std_23"
+      ],
+      "direct_dependencies": [
+        "journal",
+        "journal_signal_adapter"
+      ],
+      "consumer_targets": [],
+      "consumer_fan_out": 0,
+      "vendor_dependencies": [],
+      "helper_units": [],
+      "public_tokens": 0,
+      "private_tokens": 136,
+      "upstream_public_tokens": 4417,
+      "context_window_tokens": 4553,
+      "context_saturation": 0.2779,
+      "churn_volatility": 0.1,
+      "vendor_toxicity": 0,
+      "psi_sizing_score": 0.2134,
+      "subagent_model": "flash_lite",
+      "pmu_metrics": null
+    },
+    "item_proto": {
+      "target_type": "static_library",
+      "is_anchor": false,
+      "execution_nature": "schema_codegen",
+      "has_test": true,
+      "has_benchmark": false,
+      "compiler_regime": [
+        "SYSTEM_ON_CODEGEN"
+      ],
+      "direct_dependencies": [],
+      "consumer_targets": [
+        "item_store"
+      ],
+      "consumer_fan_out": 1,
+      "vendor_dependencies": [
+        "protobuf"
+      ],
+      "helper_units": [],
+      "public_tokens": 40,
+      "private_tokens": 0,
+      "upstream_public_tokens": 0,
+      "context_window_tokens": 40,
+      "context_saturation": 0.0024,
+      "churn_volatility": 0.1,
+      "vendor_toxicity": 0.85,
+      "psi_sizing_score": 0.3007,
+      "subagent_model": "flash",
+      "pmu_metrics": null
+    },
+    "item_store": {
+      "target_type": "static_library",
+      "is_anchor": false,
+      "execution_nature": "pure_compute",
+      "has_test": true,
+      "has_benchmark": true,
+      "compiler_regime": [],
+      "direct_dependencies": [
+        "item_proto",
+        "journal"
+      ],
+      "consumer_targets": [],
+      "consumer_fan_out": 0,
+      "vendor_dependencies": [],
+      "helper_units": [],
+      "public_tokens": 209,
+      "private_tokens": 406,
+      "upstream_public_tokens": 4147,
+      "context_window_tokens": 4762,
+      "context_saturation": 0.2906,
+      "churn_volatility": 0.1,
+      "vendor_toxicity": 0,
+      "psi_sizing_score": 0.2172,
+      "subagent_model": "flash_lite",
+      "pmu_metrics": {
+        "speedup_ratio": 1.091,
+        "bottleneck": "hardware_saturated",
+        "directive": "stop_hardware_saturated",
+        "worth_optimizing": false,
+        "wall_ns_per_op": 1405.187,
+        "cycles_per_op": 2570.357,
+        "instructions_per_op": 9344.17,
+        "ipc": 3.635,
+        "branch_misses_per_op": 0.267,
+        "cache_misses_per_op": 1.068,
+        "dirty": false
+      }
+    },
+    "journal": {
+      "target_type": "static_library",
+      "is_anchor": true,
+      "execution_nature": "boundary_io",
+      "has_test": true,
+      "has_benchmark": true,
+      "compiler_regime": [
+        "cxx_std_23"
+      ],
+      "direct_dependencies": [],
+      "consumer_targets": [
+        "app",
+        "item_store",
+        "journal_signal_adapter",
+        "perf_scope",
+        "tbb_transform"
+      ],
+      "consumer_fan_out": 5,
+      "vendor_dependencies": [
+        "libsystemd"
+      ],
+      "helper_units": [
+        "journal_boundary",
+        "journal_sink"
+      ],
+      "public_tokens": 4107,
+      "private_tokens": 10838,
+      "upstream_public_tokens": 0,
+      "context_window_tokens": 14945,
+      "context_saturation": 0.9122,
+      "churn_volatility": 0.1,
+      "vendor_toxicity": 0.25,
+      "psi_sizing_score": 0.5537,
+      "subagent_model": "flash",
+      "pmu_metrics": {
+        "speedup_ratio": 1.297,
+        "bottleneck": "memory_bound",
+        "directive": "continue_optimizing",
+        "worth_optimizing": true,
+        "wall_ns_per_op": 190281.565,
+        "cycles_per_op": 9992.655,
+        "instructions_per_op": 19784.56,
+        "ipc": 1.98,
+        "branch_misses_per_op": 0.23,
+        "cache_misses_per_op": 53.585,
+        "dirty": false
+      }
+    },
+    "journal_signal_adapter": {
+      "target_type": "static_library",
+      "is_anchor": true,
+      "execution_nature": "boundary_io",
+      "has_test": true,
+      "has_benchmark": false,
+      "compiler_regime": [],
+      "direct_dependencies": [
+        "journal"
+      ],
+      "consumer_targets": [
+        "app"
+      ],
+      "consumer_fan_out": 1,
+      "vendor_dependencies": [],
+      "helper_units": [],
+      "public_tokens": 310,
+      "private_tokens": 798,
+      "upstream_public_tokens": 4107,
+      "context_window_tokens": 5215,
+      "context_saturation": 0.3183,
+      "churn_volatility": 0.1,
+      "vendor_toxicity": 0,
+      "psi_sizing_score": 0.1255,
+      "subagent_model": "flash_lite",
+      "pmu_metrics": null
+    },
+    "perf_scope": {
+      "target_type": "static_library",
+      "is_anchor": true,
+      "execution_nature": "boundary_io",
+      "has_test": true,
+      "has_benchmark": false,
+      "compiler_regime": [],
+      "direct_dependencies": [
+        "journal"
+      ],
+      "consumer_targets": [],
+      "consumer_fan_out": 0,
+      "vendor_dependencies": [],
+      "helper_units": [],
+      "public_tokens": 637,
+      "private_tokens": 3164,
+      "upstream_public_tokens": 4107,
+      "context_window_tokens": 7908,
+      "context_saturation": 0.4827,
+      "churn_volatility": 0.1,
+      "vendor_toxicity": 0,
+      "psi_sizing_score": 0.1748,
+      "subagent_model": "flash_lite",
+      "pmu_metrics": null
+    },
+    "tbb_transform": {
+      "target_type": "static_library",
+      "is_anchor": false,
+      "execution_nature": "pure_compute",
+      "has_test": true,
+      "has_benchmark": true,
+      "compiler_regime": [],
+      "direct_dependencies": [
+        "journal"
+      ],
+      "consumer_targets": [],
+      "consumer_fan_out": 0,
+      "vendor_dependencies": [
+        "tbb"
+      ],
+      "helper_units": [],
+      "public_tokens": 125,
+      "private_tokens": 176,
+      "upstream_public_tokens": 4107,
+      "context_window_tokens": 4408,
+      "context_saturation": 0.269,
+      "churn_volatility": 0.1,
+      "vendor_toxicity": 0.65,
+      "psi_sizing_score": 0.3407,
+      "subagent_model": "flash",
+      "pmu_metrics": {
+        "speedup_ratio": 1.028,
+        "bottleneck": "unknown_pmu_inactive",
+        "directive": "stop_diminishing_returns",
+        "worth_optimizing": false,
+        "wall_ns_per_op": 29009.06,
+        "cycles_per_op": 0.0,
+        "instructions_per_op": 0.0,
+        "ipc": 0.0,
+        "branch_misses_per_op": 0.0,
+        "cache_misses_per_op": 0.0,
+        "dirty": false
+      }
+    }
+  },
+  "edges": [
+    {
+      "source": "app",
+      "target": "journal",
+      "linkage": "PRIVATE",
+      "target_kind": "component"
+    },
+    {
+      "source": "app",
+      "target": "journal_signal_adapter",
+      "linkage": "PRIVATE",
+      "target_kind": "component"
+    },
+    {
+      "source": "item_proto",
+      "target": "protobuf",
+      "linkage": "PUBLIC",
+      "target_kind": "vendor"
+    },
+    {
+      "source": "item_store",
+      "target": "journal",
+      "linkage": "PUBLIC",
+      "target_kind": "component"
+    },
+    {
+      "source": "item_store",
+      "target": "item_proto",
+      "linkage": "PRIVATE",
+      "target_kind": "component"
+    },
+    {
+      "source": "journal",
+      "target": "libsystemd",
+      "linkage": "PRIVATE",
+      "target_kind": "vendor"
+    },
+    {
+      "source": "journal_signal_adapter",
+      "target": "journal",
+      "linkage": "PRIVATE",
+      "target_kind": "component"
+    },
+    {
+      "source": "perf_scope",
+      "target": "journal",
+      "linkage": "PRIVATE",
+      "target_kind": "component"
+    },
+    {
+      "source": "tbb_transform",
+      "target": "journal",
+      "linkage": "PUBLIC",
+      "target_kind": "component"
+    },
+    {
+      "source": "tbb_transform",
+      "target": "tbb",
+      "linkage": "PRIVATE",
+      "target_kind": "vendor"
+    }
+  ],
+  "refactor_candidates": [
+    {
+      "id": "REF-TOPO-item_proto-item_store",
+      "kind": "topology_repartition",
+      "recommended_skill": "architect",
+      "targets": [
+        "item_proto",
+        "item_store"
+      ],
+      "impact_score": 0.797,
+      "summary": "2-to-1 contraction candidate: item_proto has consumer_fan_out=1 into item_store. Consolidating item_proto into item_store eliminates scaffolding drag with delta_phi=9.57.",
+      "metrics": {
+        "from_count": 2,
+        "to_count": 1,
+        "delta_phi": 9.57,
+        "merged_context_tokens": 4762
+      },
+      "discovered_at_commit": "586331abe8fc",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-ACCEL-PMU-journal",
+      "kind": "kernel_acceleration",
+      "recommended_skill": "performance",
+      "targets": [
+        "journal"
+      ],
+      "impact_score": 0.577,
+      "summary": "Hardware PMU report for journal indicates directive=continue_optimizing with bottleneck=memory_bound and speedup=1.297x.",
+      "metrics": {
+        "bottleneck": "memory_bound",
+        "speedup_ratio": 1.297,
+        "wall_ns_per_op": 190281.565,
+        "ipc": 1.98,
+        "cache_misses_per_op": 53.585
+      },
+      "discovered_at_commit": "586331abe8fc",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-INSULATE-HDR-journal_signal_adapter",
+      "kind": "contract_insulation",
+      "recommended_skill": "feature",
+      "targets": [
+        "journal_signal_adapter"
+      ],
+      "impact_score": 0.45,
+      "summary": "Public header journal_signal_adapter.hpp includes heavy standard headers (thread) across 1 downstream callers.",
+      "metrics": {
+        "heavy_headers": [
+          "thread"
+        ],
+        "public_tokens": 310,
+        "consumer_fan_out": 1
+      },
+      "discovered_at_commit": "586331abe8fc",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-SYNC-TIDY-journal",
+      "kind": "verification_sync",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "journal"
+      ],
+      "impact_score": 0.5,
+      "summary": "Component journal has 2 situational static analysis warning(s) logged in production_artifacts/clang_tidy_state.md.",
+      "metrics": {
+        "logged_warning_count": 2
+      },
+      "discovered_at_commit": "586331abe8fc",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-SYNC-TIDY-journal_signal_adapter",
+      "kind": "verification_sync",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "journal_signal_adapter"
+      ],
+      "impact_score": 0.25,
+      "summary": "Component journal_signal_adapter has 1 situational static analysis warning(s) logged in production_artifacts/clang_tidy_state.md.",
+      "metrics": {
+        "logged_warning_count": 1
+      },
+      "discovered_at_commit": "586331abe8fc",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-SYNC-TIDY-perf_scope",
+      "kind": "verification_sync",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "perf_scope"
+      ],
+      "impact_score": 0.5,
+      "summary": "Component perf_scope has 2 situational static analysis warning(s) logged in production_artifacts/clang_tidy_state.md.",
+      "metrics": {
+        "logged_warning_count": 2
+      },
+      "discovered_at_commit": "586331abe8fc",
+      "user_directive": "ignored"
+    }
+  ]
+}

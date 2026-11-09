@@ -8,7 +8,7 @@ include(${CMAKE_BINARY_DIR}/target_compile_options.cmake)
 
 target_compile_definitions(${DIR_NAME} PRIVATE
         COMPONENT_BASELINE_PATH="${CMAKE_CURRENT_SOURCE_DIR}/baseline.json"
-        COMPONENT_REPORT_PATH="${PROJECT_SOURCE_DIR}/production_artifacts/profiling/${COMPONENT_NAME}_score_report.md"
+        COMPONENT_REPORT_PATH="${PROJECT_SOURCE_DIR}/production_artifacts/profiling/${COMPONENT_NAME}_score_report.json"
 )
 
 target_link_libraries(${DIR_NAME}

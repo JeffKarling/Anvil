@@ -16,5 +16,4 @@ configure_file(
 
 include(iwyu)
 include(dependencies)
-include(graphviz)
 include(perf)
