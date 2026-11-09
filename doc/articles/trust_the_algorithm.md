@@ -16,7 +16,7 @@ When software is designed through descriptive prompt rules, language models mimi
 
 ## The educational paradox in the Anvil template
 
-The Anvil template deliberately retains two components for Protocol Buffers: [targets/item_proto](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/targets/item_proto) and [targets/item_store](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/targets/item_store).
+The Anvil template deliberately retains two components for Protocol Buffers: [targets/item_proto](../../targets/item_proto) and [targets/item_store](../../targets/item_store).
 
 This choice is intentionally paradoxical.
 
