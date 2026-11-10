@@ -2,45 +2,35 @@
 
 Human software engineering has historically organized code through narrative taxonomy. Developers split software into conceptual layers like data access tiers, business logic layers, and schema definitions. These divisions feel intuitive to human minds. However, they carry subjective biases that fail when applied to modern AI coding agents.
 
-Anvil abandons narrative taxonomy in favor of objective discrete mathematics. In Anvil, component boundaries are calculated by an optimization algorithm rather than decided by human intuition or markdown checklists.
+Anvil abandons narrative taxonomy in favor of objective discrete mathematics. Component boundaries are calculated by an optimization algorithm rather than decided by human intuition or static markdown checklists. Throughout a project lifecycle, the algorithm remains the ultimate authority on how the physical dependency graph is shaped.
 
-Understanding why the algorithm recommended a single component for Protocol Buffers reveals the difference between subjective programming and mathematical systems design.
+For a worked walkthrough using the starter repository's Protocol Buffers targets, read **[The Protobuf pedagogic example](protobuf_pedagogic_example.md)**.
 
 ## The illusion of conceptual purity
 
-Traditional software development relies on high level abstractions. When an experienced programmer sees a Protocol Buffers file, their instinct is to create a dedicated schema library. In human thinking, schemas belong in their own conceptual category.
+Traditional software development relies on high level conceptual abstractions. Experienced engineers tend to partition systems by domain labels such as schemas, utilities, or core libraries. Each bucket feels tidy to a human reader regardless of how callers actually use the code.
 
-This conceptual taxonomy carries hidden costs. Every physical component introduces scaffolding overhead. A new directory requires its own build targets, export sets, compile options, and test suites.
+This conceptual taxonomy carries hidden physical costs. Every component boundary changes compiler visibility, header exposure, and build graph depth. What looks neat in a conceptual diagram often creates either needless scaffolding drag or tangled coupling in real builds.
 
-When software is designed through descriptive prompt rules, language models mimic human cognitive biases. If an agent is given text guidelines instructing it to separate concerns, the agent uncritically fractures the codebase into tiny micro components. Each component appears neat in isolation. Together, they create deep dependency graphs, fragmented context windows, and build system churn.
+When software is designed through descriptive prompt rules, language models mimic these human cognitive biases. Prose cannot measure build latency, token overhead, or fault blast radius. Left to subjective labels, agents drift away from physical reality.
 
-## The educational paradox in the Anvil template
+## Ways human written rules fail at component design
 
-The Anvil template deliberately retains two components for Protocol Buffers: [targets/item_proto](../../targets/item_proto) and [targets/item_store](../../targets/item_store).
+Consider what happens when AI agents design a system using human written descriptive markdown documents instead of math based constraints. Markdown rules describe abstractions using words rather than physical boundaries. Because prose has no quantitative threshold, subjective taxonomies fail in two opposite directions.
 
-This choice is intentionally paradoxical.
+When prose based guidelines instruct an agent to separate concerns and decouple layers, the agent creates targets simply because the words suggest a boundary. Words cannot measure build graph latency or compute the token tax imposed on downstream subagents. That path produces unnecessary fragmentation with deep, narrow graphs that serialize subagent execution and churn the build system.
 
-Both targets compile cleanly under Clang and GCC. The component `item_proto` sets `SYSTEM ON` and suppresses warnings on generated code. The component `item_store` links `item_proto` strictly `PRIVATE` and exposes a pure C++ public header. Unit tests pass across both compilers, and hardware benchmarks track execution cycles.
+When code is grouped into broader buckets like a catch all `lib` or `game_physics`, the opposite failure occurs. Throwing unrelated capabilities into one coarse target hinders both velocity and safety as proven by Lakosian analysis. Parallel subagents collide inside the same directory, and worker context windows fill with irrelevant code. Coarse targets also erode safety by mixing pure compute with stateful I/O and blending incompatible compiler flags. They expose vendor headers across boundaries and widen the blast radius of every fault.
 
-Every line of code is correct according to Lakosian physical design. Yet in this specific topology, creating two components is objectively the wrong architectural choice because the contraction algorithm proves the design should be a single consolidated component.
+Coarse libraries also force developers into harder after the fact C++ designs. When unrelated subsystems like rendering and physics live inside one oversized library, deeply nested helpers eventually need access to distant state. Passing those dependencies down through every intermediate constructor creates tramp data that pollutes unrelated interfaces. To avoid threading parameters through every layer, engineers reach for complex workarounds like service locators and hidden global registries. Others adopt runtime dependency injection frameworks or wrapper objects holding back pointers into foreign subsystems. That accidental complexity disappears when components stay small and bounded. In a graph of shallow physical targets, each component receives its exact dependencies at the boundary so new features stay straightforward C++ rather than indirection machinery.
 
-Anvil includes this two component structure for educational demonstration. It proves that an individually flawless component can still represent an architectural failure in the global graph. The template keeps both targets so developers can observe clean cross component linkage, private vendor insulation, and generated code warning suppression in living code.
+Healthy component boundaries are never a one time setup. Component selection and the DAG require ongoing adjustments throughout a project lifecycle as requirements shift. Humans rarely refactor component boundaries by hand because restructuring targets and headers across a live build graph is slow and error prone. Instead, teams patch aging coarse libraries with advanced C++ indirection to work around passing an oversized subsystem into a small consumer.
 
-In production, human engineers should never subjectively design this boundary. They must trust the Anvil algorithm.
-
-## Why prompt rules produce architectural bloat
-
-Consider what happens when an AI agent designs a system using descriptive markdown documents.
-
-Markdown rules describe abstractions using words. A typical rule document tells the agent to keep schemas independent from storage and decouple data definitions from business logic.
-
-These text rules lack physical resistance. Words cannot measure build graph latency. Prose cannot compute the token tax imposed on downstream subagents. When an agent follows markdown instructions, it creates a separate target because the words suggested a boundary, regardless of whether that boundary serves any actual consumer.
-
-Subjective taxonomies inevitably lead to target explosion. The resulting graph becomes deep and narrow. Deep graphs serialize subagent execution, bloat context windows with transitive headers, and invite merge conflicts. Worse, relying on prose misses out on the compound efficiency gains that a mathematically contracted graph provides through parallel subagent execution and minimal token overhead.
+Anvil makes continuous architectural refactoring practical through ongoing algorithmic calculations using pure mathematics. Throughout the project lifecycle, the system continuously evaluates the live graph in [production_artifacts/manifest.json](../../production_artifacts/manifest.json) and surfaces deterministic merge or split opportunities so humans can approve refactors as requirements evolve.
 
 ## Mathematical topology over subjective taxonomy
 
-Anvil solves component partitioning through Anchor Constrained Capability Contraction. The orchestrator decomposes system requirements into atomic capability vertices. Each vertex carries six physical coordinates measuring execution nature, verification requirements, external library bindings, compiler flags, token footprint, and churn rate.
+Anvil solves component partitioning through Anchor Constrained Capability Contraction. The orchestrator decomposes system requirements into atomic capability vertices. Each vertex carries six physical coordinates tracking execution nature, verification profile, and external library bindings. Those coordinates also record local compiler flags, token footprint, and churn rate.
 
 The algorithm contracts capability vertices into physical components by solving a constrained optimization problem.
 
@@ -50,79 +40,17 @@ The objective function balances four physical forces subject to hard invariant g
 * **Quotient graph acyclicity.** The physical directed acyclic graph must remain acyclic.
 * **Anchor preservation.** Foundational anchors like `journal`, `perf_scope`, and `app` must never merge into other targets.
 * **Execution parity.** Pure in memory compute kernels never merge with stateful OS or I/O boundaries.
-* **Compiler regime homogeneity.** Targets requiring local flags like `-fno-fast-math` or Protobuf warning suppression are isolated.
+* **Compiler regime homogeneity.** Targets requiring specialized local flags such as `-fno-fast-math` or generated code warning suppression are isolated.
 * **Context locality.** The combined token footprint of a component and its direct headers must not exceed the subagent context ceiling.
 
-## Proving the single component calculation
-
-The mathematical correctness of the algorithm becomes evident when analyzing the forces on `item_store`.
-
-Suppose the requirements mandate storing structured records to disk using Protocol Buffers. No other component in the system reads or writes this format. The consumer fan out of the schema is exactly one.
-
-Rather than blindly committing to a single predetermined layout, the core intelligence of the algorithm lies in systematically generating and scoring competing topological alternatives. For this capability, it evaluates the split candidate topology against the contracted candidate topology.
-
-### The split two component layout
-
-When the schema is extracted into `item_proto` and consumed by `item_store`, the algorithm evaluates the physical forces.
-
-**Scaffolding drag.** The layout introduces an extra target directory, an extra CMake build file, an additional library target, and extra test scaffolding.
-
-$$C_{\text{scaffold}} > 0$$
-
-**Blast radius and context waste.** Because no other component in the workspace consumes `item_proto`, the fan out is one. Creating a separate target does not isolate any secondary consumer from changes.
-
-$$C_{\text{waste}} = 0, \quad C_{\text{blast}} = 0$$
-
-**Total friction score.** The split layout incurs non zero scaffolding cost while delivering zero reduction in blast radius or context waste.
-
-$$F(\text{split}) = C_{\text{scaffold}} + C_{\text{insulate}}$$
-
-### The merged single component layout
-
-When the `.proto` file is placed directly inside `item_store`, the custom compilation command generates `.pb.h` and `.pb.cc` privately inside the local build directory of `item_store`.
-
-**Scaffolding drag.** Only one target directory, one CMake file, and one test suite exist.
-
-$$C_{\text{scaffold}} = 0$$
-
-**Context waste.** The generated header is never added to any public file set. Downstream callers see only native C++ domain types in `item_store.hpp`. Downstream context waste is zero.
-
-$$C_{\text{waste}} = 0$$
-
-**Blast radius.** No external component links the schema. Changes to the `.proto` definition recompile only `item_store.cpp`.
-
-$$C_{\text{blast}} = 0$$
-
-**Vendor insulation.** Because the generated files exist only inside the private build tree, external components cannot include them. Vendor insulation reaches its theoretical maximum.
-
-$$F(\text{merged}) < F(\text{split})$$
-
-The mathematical optimization function proves that merging the schema into a single component yields a strictly lower friction score.
-
-## When the mathematics demand a split
-
-The algorithm is never dogmatic. If the system requirements change, the mathematical forces change immediately.
-
-Suppose a new requirement introduces a high speed network ingestion component that receives the same Protocol Buffers packets over UDP. Now two independent components consume the schema. The consumer fan out is two.
-
-If the schema were merged into `item_store`, the networking component would be forced to depend on `item_store`. That dependency introduces severe context waste and pulls unrelated storage logic into the networking subagent.
-
-$$C_{\text{waste}} \gg 0, \quad C_{\text{blast}} \gg 0$$
-
-In that topology, the penalty for context waste and blast radius exceeds the cost of scaffolding drag.
-
-$$F(\text{merged}) > F(\text{split})$$
-
-The optimization algorithm automatically contracts the schema into a dedicated `item_proto` target and fans out private edges to both `item_store` and the networking component.
-
-The decision is entirely mathematical. No human convention, architectural committee, or subjective prompt rule was required.
+The objective function and invariant gates guard against both extremes. Scaffolding drag $C_{\text{scaffold}}$ penalizes pointless micro splits when consumer fan out is one. At the same time, context waste $C_{\text{waste}}$ and blast radius $C_{\text{blast}}$ punish oversized targets. Vendor insulation $C_{\text{insulate}}$ pairs with execution parity and compiler regime homogeneity under the 16384 token context ceiling. Those constraints forbid collapsing unrelated code into a coarse `lib`.
 
 ## Strategic architecture versus tactical implementation
 
-This distinction highlights the division of labor in agentic systems development.
+This distinction defines the division of labor in agentic systems development.
 
-Strategic architecture belongs to discrete mathematics. The orchestrator synthesizes the global directed acyclic graph by minimizing physical friction across invariant gates. It constructs a wide, shallow graph optimized for subagent independence.
+Strategic architecture belongs to discrete mathematics. The orchestrator synthesizes and continuously maintains the global directed acyclic graph by minimizing physical friction across invariant gates. It constructs a wide, shallow graph optimized for subagent independence and adapts that topology whenever new requirements arrive.
 
 Tactical implementation belongs to short lived worker agents. Once the strategic manager locks the component vertices, individual subagents implement private translation units inside isolated workspaces. Each worker focuses strictly on its assigned target and direct upstream public contracts.
 
-By substituting subjective narrative taxonomies with mathematical capability contraction, Anvil ensures that system architecture remains deterministic, objective, and verified.
+By substituting subjective narrative taxonomies with continuous mathematical capability contraction, Anvil keeps system architecture deterministic and verified throughout the lifecycle of the codebase.

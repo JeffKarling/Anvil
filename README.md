@@ -36,7 +36,7 @@ Good architecture is ultimately applied information theory. By strictly bounding
 
 Read Manual **[MANUAL.md](doc/MANUAL.md)** for best practices on directing Anvil inside Google Antigravity. The manual explains how to curate third party libraries, write high level requirements specifications, and collaborate with the orchestrator across Git commits.
 
-For an in depth architectural analysis on discrete mathematical partitioning over narrative taxonomy, read **[Trust the algorithm in systems architecture](doc/articles/trust_the_algorithm.md)**.
+For an in depth architectural analysis on discrete mathematical partitioning over narrative taxonomy, read **[Trust the algorithm in systems architecture](doc/articles/trust_the_algorithm.md)**. For a concrete case study of the starter template's Protocol Buffers targets, read **[The Protobuf pedagogic example](doc/articles/protobuf_pedagogic_example.md)**.
 
 ## License
 
