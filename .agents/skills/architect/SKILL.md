@@ -1,57 +1,80 @@
 ---
 name: architect
 description: >-
-  Decomposes multi-component features or system designs into an acyclic physical component graph optimized for context window locality and parallel subagent execution.
-  Use this skill when designing a new system capability, planning multiple components, or orchestrating subagents across the DAG.
+  Supervises the deterministic architecture lifecycle. Dispatches strategic_worker to partition physical targets and author contracts, validates with strategic_verifier, and coordinates tactical_worker and tactical_verifier waves across the DAG.
 ---
 
 # Agentic DAG architecture workflow
 
-You must act as the strategic orchestrator for this workflow regardless of which model is active. Gemini 4 Argon is recommended for this role because it assumes orchestration proactively, though the workflow is model agnostic. Translate requirements into a logical capability graph, contract it into physical targets, and orchestrate tactical workers across isolated Antigravity shared Git worktrees to implement the contracted graph.
+You must act as the monitor for this workflow regardless of which model is active. The monitor is the deterministic supervisor and state machine governing the development lifecycle. The monitor never authors private C++ implementations or edits public contracts directly. Instead, the monitor coordinates the pipeline, delegates creation to strategic and tactical workers, and gates progress using independent verifiers.
 
-## Step 1. Verify clean Git state, resync manifest, and translate requirements
+## Step 1. Verify clean Git state and clarify requirements
 
-Run the bottom up manifest introspection with a strict clean working tree check before reading repository files.
+Run the manifest introspection with a clean working tree requirement before starting.
 
 ```bash
 python3 .agents/skills/architect/scripts/sync_manifest.py --require-clean-git
 ```
 
-* If `sync_manifest.py --require-clean-git` exits non zero, refuse to start the architecture workflow until all uncommitted files are committed or stashed and the working tree is clean.
-* Read `cmake/dependencies.cmake` and `production_artifacts/manifest.json` before proposing any component.
-* Inspect `refactor_candidates` in `production_artifacts/manifest.json`. Execute any `topology_repartition` candidate whose `user_directive` is set to `"approved"`, and leave all candidates marked `"ignored"` untouched unless they are directly superseded by the new requirement subgraph.
-* Resolve ambiguous input types, output contracts, or failure modes with the user before partitioning the graph.
-* Map each atomic operation to six physical coordinates covering execution nature, verification profile, private library bindings from `cmake/dependencies.cmake`, local compiler regime flags, token footprint, and churn volatility.
-* Bind approved third party libraries from `cmake/dependencies.cmake` wherever possible so components remain thin private adapters rather than bespoke reimplementations. Treat `QUIET` entries as pre approved candidates that can be installed on demand when selected, and treat `REQUIRED` entries as mandatory libraries explicitly requested by the user.
-* Split any mixed operation that combines blocking OS or I/O calls with deterministic in memory compute into separate capability vertices before optimization.
+* If the script exits non zero, refuse to proceed until all uncommitted files are committed or stashed.
+* Review [cmake/dependencies.cmake](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/cmake/dependencies.cmake) and [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json) before delegating work.
+* Inspect refactor candidates in [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json). Execute any topology repartition candidate marked approved by the user.
+* Clarify ambiguous input types, contracts, or failure modes with the user before dispatching the strategic worker.
 
-## Step 2. Contract capabilities under hard physical gates
+## Step 2. Dispatch strategic worker to partition capabilities and scaffold targets
 
-Group capabilities into physical targets under `targets/<name>/` to minimize context waste and blast radius. Balance scaffolding drag against vendor header exposure while enforcing five hard invariant gates.
+Dispatch the strategic worker subagent to group capabilities into physical targets and author public contracts.
 
+```json
+{
+  "Subagents": [
+    {
+      "TypeName": "strategic_worker",
+      "Role": "Strategic Architect",
+      "Model": "pro",
+      "Workspace": "inherit",
+      "Prompt": "Translate requirements into physical targets under targets/. Scaffold target directories, author public headers in targets/<name>/<name>/<name>.hpp, author error catalogs in targets/<name>/<name>.catalog, configure targets/<name>/CMakeLists.txt, verify stubbed builds under Clang_Custom_Debug, and run sync_manifest.py --check. Report completion back to monitor."
+    }
+  ]
+}
+```
+
+The strategic worker enforces five hard invariant gates:
 * **Quotient DAG acyclicity.** The physical target dependency graph must remain strictly acyclic.
-* **Anchor preservation.** Never merge distinct foundational anchors such as `journal`, `perf_scope`, or `journal_signal_adapter`. Keep the `app` executable target isolated from library anchors.
-* **Execution and verification parity.** Never merge pure deterministic compute capabilities with stateful OS, I/O, or IPC boundary capabilities. Pure compute targets include `<name>BENCH/` while stateful boundary targets pass `--no-bench` when no hot compute path exists.
-* **Compiler regime homogeneity.** Capabilities requiring local flag overrides must not be merged with capabilities under standard flags. Isolate targets requiring `-fno-fast-math`, explicit SIMD flags, or private C++23 features as well as Protobuf `SYSTEM ON` targets.
-* **Context locality and tactical helpers.** Keep total worker context $W(C_i)$ for a target and its direct public headers within $B_{\max} = 16384$ tokens. Merge single consumer helpers that share the same execution nature, compiler regime, and header footprint into private `<helper>.hpp` and `<helper>.cpp` files inside the parent target. Extract a sibling target `targets/<new_name>/` whenever a capability serves multiple callers, links a distinct high toxicity library, or forces upstream callers to pay a token tax for unused headers.
+* **Anchor preservation.** Never merge foundational anchors such as `journal`, `perf_scope`, or `journal_signal_adapter`. Keep the `app` executable target isolated from library anchors.
+* **Execution and verification parity.** Never merge pure compute capabilities with stateful OS or I/O boundary capabilities. Pure compute targets must include benchmark suites.
+* **Compiler regime homogeneity.** Capabilities requiring custom flags must remain isolated. Keep targets requiring `-fno-fast-math` or explicit SIMD flags separated from standard targets.
+* **Context locality and tactical helpers.** Keep total worker context within $B_{\max} = 16384$ tokens. Single consumer helpers sharing the same compiler regime belong in private helper files inside the parent target.
 
-## Step 3. Execute contract first scaffolding and compute subagent sizing on the anchor commit
+## Step 3. Audit contract anchor with strategic verifier and commit
 
-Complete all public contracts and persist the updated manifest before delegating private implementations.
+Once the strategic worker finishes, verify the public contracts before committing the anchor.
 
-1. Run `.agents/skills/feature/scripts/scaffold.py` for each planned component in the DAG.
-2. Author the final public interface in `targets/<name>/<name>/<name>.hpp`, the catalog contract in `targets/<name>/<name>.catalog`, and the dependency edges in `targets/<name>/CMakeLists.txt` for every new component.
-3. Verify that the stubbed component graph configures and compiles cleanly.
-4. Run `python3 .agents/skills/architect/scripts/sync_manifest.py --check` to compute $\Psi(C_i)$ and record each target's `subagent_model` tier (`flash` or `pro`) inside `production_artifacts/manifest.json`.
-5. Ensure `strategic_verifier` from `.agents/agents/strategic_verifier/agent.json` is registered in the session. Dispatch it via `invoke_subagent` with `TypeName: "strategic_verifier"`, `Workspace: "inherit"`, and `Model: "flash"` to audit public contracts and confirm manifest gates $H_1$ through $H_5$ pass.
-6. Commit the clean contract anchor so every subagent worktree branched from `HEAD` sees the new public contracts and `production_artifacts/manifest.json`.
+1. Dispatch the strategic verifier subagent via `invoke_subagent`.
 
-## Step 4. Orchestrate tactical workers via Antigravity `invoke_subagent`
+```json
+{
+  "Subagents": [
+    {
+      "TypeName": "strategic_verifier",
+      "Role": "Strategic Verifier",
+      "Model": "flash",
+      "Workspace": "inherit",
+      "Prompt": "Audit candidate public contracts and manifest gates. Verify that targets/<name>/<name>/<name>.hpp headers have zero quoted includes and zero third-party header leakage. Verify that python3 .agents/skills/architect/scripts/sync_manifest.py --check passes gates H1 through H5. Report a concise pass or fail verdict."
+    }
+  ]
+}
+```
 
-Keep the strategic manager context free of private `.cpp` implementations and inner compiler loops.
+2. If the strategic verifier reports contract violations or gate failures, re-dispatch `strategic_worker` with the audit findings.
+3. Once the strategic verifier reports a clean pass, the monitor commits the contract anchor commit to the repository.
 
-1. Ensure both the `tactical_worker` subagent from `.agents/agents/tactical_worker/agent.json` and the `tactical_verifier` subagent from `.agents/agents/tactical_verifier/agent.json` are registered in the session.
-2. Dispatch parallel waves of tactical workers using `invoke_subagent` with `TypeName: "tactical_worker"`, `Workspace: "share"`, and `Model` set from `subagent_model` in `production_artifacts/manifest.json` (`flash` for $\Psi(C_i) < 0.70$ and `pro` for $\Psi(C_i) \ge 0.70$).
+## Step 4. Orchestrate tactical workers and verifiers in parallel
+
+Keep the monitor context free of private `.cpp` implementations and mechanical compiler loops.
+
+1. Ensure [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) and [tactical_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_verifier/agent.json) are registered.
+2. Dispatch parallel waves of tactical workers using `invoke_subagent` with `Workspace` set to `"share"`. Set `Model` from `subagent_model` in [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json) using `flash` for $\Psi(C_i) < 0.70$ and `pro` for $\Psi(C_i) \ge 0.70$.
 
 ```json
 {
@@ -61,20 +84,19 @@ Keep the strategic manager context free of private `.cpp` implementations and in
       "Role": "Component Implementer",
       "Model": "flash",
       "Workspace": "share",
-      "Prompt": "Implement targets/<name>/<name>.cpp against targets/<name>/<name>/<name>.hpp and direct upstream headers. Verify unit tests, sanitizers, and PMU baselines."
+      "Prompt": "Implement targets/<name>/<name>.cpp against targets/<name>/<name>/<name>.hpp and direct upstream headers. Verify unit tests, sanitizers, and baseline benchmark."
     }
   ]
 }
 ```
 
-3. Restrict each tactical worker to reading and editing only its assigned `targets/<name>/` directory plus reading the public `<dep>/<dep>.hpp` headers of its direct dependencies.
-4. When a worker completes, dispatch `tactical_verifier` via `invoke_subagent` with `TypeName: "tactical_verifier"`, `Workspace: "inherit"`, and `Model: "flash"` to audit the candidate changes in `targets/<name>/`. Verify that the public contract is unchanged, test assertions are preserved, benchmarks are non-trivial, and scoped builds and sanitizers pass.
-5. If `tactical_verifier` reports a clean pass, commit the component changes to the main branch. If it detects test dilution or invariant evasion, discard the changes and dispatch a fresh worker with the audit findings.
-6. If a downstream sanitizer or static analysis checkpoint fails on an integrated branch, bisect the commit ledger to identify the first offending commit. Quarantine its descendant subtree, hard reset to the last clean ancestor commit, and seed `<name>TEST` with a regression test reproducing the fault.
+3. Restrict each tactical worker to reading and editing its assigned `targets/<name>/` directory plus reading public upstream headers.
+4. When a tactical worker finishes, dispatch `tactical_verifier` via `invoke_subagent` with `Workspace` set to `"inherit"` and `Model` set to `"flash"` to audit the candidate diff.
+5. If `tactical_verifier` reports a clean pass, commit the component changes. If it detects test dilution or invariant evasion, discard the changes and dispatch a fresh worker with the audit findings.
 
-## Step 5. Whole graph verification and manifest resync
+## Step 5. Whole graph verification and final release gate
 
-Once all component implementations merge cleanly, verify the integrated DAG across both compilers and synchronize `production_artifacts/manifest.json`.
+Once all components merge cleanly, verify the integrated system across compilers and synchronize [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json).
 
 ```bash
 ./production_artifacts/build_all.sh custom debug
@@ -82,4 +104,4 @@ Once all component implementations merge cleanly, verify the integrated DAG acro
 python3 .agents/skills/architect/scripts/sync_manifest.py --check
 ```
 
-Dispatch `strategic_verifier` via `invoke_subagent` to confirm all five invariant gates $H_1$ through $H_5$ pass and no dirty benchmarks remain.
+Dispatch `strategic_verifier` via `invoke_subagent` to confirm all five invariant gates $H_1$ through $H_5$ pass and zero dirty benchmarks remain.

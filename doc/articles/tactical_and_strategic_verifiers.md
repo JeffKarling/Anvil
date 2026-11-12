@@ -2,7 +2,7 @@
 
 Autonomous software engineering fails when an agent grades its own work. When a language model authors implementation code, colocated unit tests, and performance benchmarks in the same loop, it inevitably faces subtle reward hacking pressures. A worker stuck on an edge case can satisfy test gates by deleting assertions, loosening numeric tolerances, or mocking away difficult external dependencies. During optimization, it can allow the compiler to constant fold loops away while reporting dramatic benchmark speedups.
 
-Anvil solves this verification dilemma through a layered division of labor. Building on John Lakos physical component design, Anvil pairs implementation workers with read only verifiers operating at two distinct physical scopes.
+Anvil solves this verification dilemma through a layered division of labor. Building on John Lakos physical component design, Anvil pairs implementation workers with read only verifiers operating at two distinct physical scopes, all supervised by a deterministic monitor.
 
 Tactical verification operates strictly within an isolated component directory to detect implementation cheating. Strategic verification operates across the whole dependency graph to ensure contract hygiene and system coherence.
 
@@ -20,13 +20,21 @@ Self grading manifests in four distinct failure modes.
 
 Relying on a single prompt or self review loop cannot eliminate these behaviors. True verification requires adversarial separation, bounded context scopes, and read only permissions.
 
+## The three tier supervisory architecture
+
+To ensure complete verification independence, Anvil separates responsibilities across three distinct tiers:
+
+* **The supervisor tier.** The [monitor](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/monitor/agent.json) operates as a deterministic state machine. It manages the lifecycle sequence, dispatches subagents, and commits verified artifacts. It never authors C++ implementations or edits public contracts directly.
+* **The strategic tier.** The [strategic_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_worker/agent.json) authors physical target topologies, public headers, and error catalogs. The [strategic_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_verifier/agent.json) acts as an independent critic evaluating public interface hygiene and invariant gates $H_1$ through $H_5$.
+* **The tactical tier.** The [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) authors private implementations and unit tests inside isolated Git worktrees. The [tactical_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_verifier/agent.json) audits candidate diffs to catch test dilution and cheating before merging.
+
 ## The tactical duo of worker and verifier
 
-At the component level, Anvil divides labor into a sequential duo consisting of a `tactical_worker` and a `tactical_verifier`.
+At the component level, Anvil divides labor into a sequential duo consisting of a [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) and a [tactical_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_verifier/agent.json).
 
 ### The tactical worker
 
-The `tactical_worker` owns private implementation and mechanical build loops inside an isolated Git worktree.
+The [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) owns private implementation and mechanical build loops inside an isolated Git worktree.
 
 Operating under a strict $B_{\max} = 16384$ token ceiling, the worker reads only its assigned directory under `targets/<name>/` and the public headers of direct upstream dependencies. It writes `targets/<name>/<name>.cpp`, `targets/<name>/<name>TEST/`, and optional benchmark targets under `targets/<name>/<name>BENCH/`.
 
@@ -34,7 +42,7 @@ The worker is responsible for all mechanical compilation loops. It builds scoped
 
 ### The tactical verifier
 
-Once the worker completes its task, the orchestrator invokes `tactical_verifier`.
+Once the worker completes its task, the monitor invokes [tactical_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_verifier/agent.json).
 
 The tactical verifier is strictly read only and holds no file editing tools. Running in the primary workspace against the candidate diff, it audits the worker output before any change is committed to the main branch.
 
@@ -44,19 +52,19 @@ The tactical verifier enforces four specific audit gates.
 * **Benchmark validity.** In components with hardware PMU benchmarks, the verifier inspects `targets/<name>/<name>BENCH/` to confirm workloads are non trivial and execution inputs cannot be constant folded away by the compiler.
 * **Invariant and tool compliance.** The verifier scans the diff for unjustified suppression comments, altered CMake warning flags, quoted include directives, or leaked vendor headers.
 
-If the tactical verifier discovers test dilution or contract violations, the candidate diff is discarded. The orchestrator dispatches a fresh worker armed with the exact audit findings. If the verifier issues a clean pass, the orchestrator commits the atomic change to the repository ledger.
+If the tactical verifier discovers test dilution or contract violations, the candidate diff is discarded. The monitor dispatches a fresh worker armed with the exact audit findings. If the verifier issues a clean pass, the monitor commits the atomic change to the repository ledger.
 
-## The strategic verifier across the dependency graph
+## The strategic duo across the dependency graph
 
 A component can pass all unit tests while the overall system fails. Because the tactical verifier is scoped to one directory, it cannot detect dropped system requirements, broken cross target integration, or architectural coupling.
 
-The strategic orchestrator acts as a strategic worker during graph design and public contract scaffolding. To avoid strategic self grading, Anvil introduces the `strategic_verifier`.
+To solve this, Anvil pairs the [strategic_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_worker/agent.json) with an independent [strategic_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_verifier/agent.json).
 
 The `strategic_verifier` is a read only agent that audits the global dependency graph and public contracts across two specific checkpoints.
 
 ### Checkpoint 1 at the contract anchor
 
-Step 3 of the architecture workflow scaffolds all physical targets, authors public headers, and computes component sizing scores. Before the orchestrator commits this anchor and spawns worker waves, the `strategic_verifier` executes Checkpoint 1.
+Step 2 and Step 3 of the architecture workflow partition capabilities, scaffold all physical targets, author public headers, and compute component sizing scores via the `strategic_worker`. Before the monitor commits this anchor and spawns tactical worker waves, the `strategic_verifier` executes Checkpoint 1.
 
 The verifier conducts three global checks.
 * **Hard mathematical gates.** The verifier runs manifest introspection to confirm invariant gates $H_1$ through $H_5$ pass. It verifies quotient graph acyclicity, anchor preservation, execution parity, compiler regime homogeneity, and context locality.
@@ -79,4 +87,4 @@ In monolithic codebases, auditing changes requires holding massive context in me
 
 Under Lakosian physical design, context is bounded mathematically. A tactical verifier needs only the component directory and its direct upstream headers, easily fitting within the token budget. A strategic verifier needs only public interface contracts and graph topology, completely ignoring private implementation details.
 
-By decoupling tactical cheat detection from strategic graph verification, Anvil achieves reliable quality control without human micromanagement. Workers remain fast and focused on private code, while independent verifiers guarantee architectural integrity at every commit.
+By decoupling tactical cheat detection from strategic graph verification and coordinating both through a deterministic monitor, Anvil achieves reliable quality control without human micromanagement. Workers remain fast and focused on private code, while independent verifiers guarantee architectural integrity at every commit.
