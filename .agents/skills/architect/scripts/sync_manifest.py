@@ -555,9 +555,7 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
             4,
         )
 
-        if psi_score < 0.30:
-            subagent_model = "flash_lite"
-        elif psi_score < 0.70:
+        if psi_score < 0.70:
             subagent_model = "flash"
         else:
             subagent_model = "pro"

@@ -109,7 +109,7 @@
       "churn_volatility": 0.1,
       "vendor_toxicity": 0,
       "psi_sizing_score": 0.2134,
-      "subagent_model": "flash_lite",
+      "subagent_model": "flash",
       "pmu_metrics": null
     },
     "item_proto": {
@@ -164,7 +164,7 @@
       "churn_volatility": 0.1,
       "vendor_toxicity": 0,
       "psi_sizing_score": 0.2172,
-      "subagent_model": "flash_lite",
+      "subagent_model": "flash",
       "pmu_metrics": {
         "speedup_ratio": 1.091,
         "bottleneck": "hardware_saturated",
@@ -251,7 +251,7 @@
       "churn_volatility": 0.1,
       "vendor_toxicity": 0,
       "psi_sizing_score": 0.1255,
-      "subagent_model": "flash_lite",
+      "subagent_model": "flash",
       "pmu_metrics": null
     },
     "perf_scope": {
@@ -276,7 +276,7 @@
       "churn_volatility": 0.1,
       "vendor_toxicity": 0,
       "psi_sizing_score": 0.1748,
-      "subagent_model": "flash_lite",
+      "subagent_model": "flash",
       "pmu_metrics": null
     },
     "tbb_transform": {
