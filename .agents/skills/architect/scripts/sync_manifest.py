@@ -426,6 +426,32 @@ def parse_clang_tidy_logged_targets(repo_root: pathlib.Path) -> dict[str, int]:
     return counts
 
 
+def load_cppcheck_report(repo_root: pathlib.Path) -> dict[str, list[dict[str, Any]]]:
+    report_file = repo_root / "production_artifacts" / "cppcheck_report.json"
+    if not report_file.is_file():
+        return {}
+    try:
+        data = json.loads(report_file.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            return data
+    except (OSError, json.JSONDecodeError):
+        pass
+    return {}
+
+
+def load_iwyu_report(repo_root: pathlib.Path) -> dict[str, list[dict[str, Any]]]:
+    report_file = repo_root / "production_artifacts" / "iwyu_report.json"
+    if not report_file.is_file():
+        return {}
+    try:
+        data = json.loads(report_file.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            return data
+    except (OSError, json.JSONDecodeError):
+        pass
+    return {}
+
+
 def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
     manifest_path = repo_root / "production_artifacts" / "manifest.json"
     existing_candidates: dict[str, dict[str, Any]] = {}
@@ -468,6 +494,8 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
     target_names = [d.name for d in target_dirs]
     churn_map = compute_empirical_churn(repo_root, target_names)
     clang_tidy_counts = parse_clang_tidy_logged_targets(repo_root)
+    cppcheck_data = load_cppcheck_report(repo_root)
+    iwyu_data = load_iwyu_report(repo_root)
 
     raw_targets: dict[str, dict[str, Any]] = {}
     all_edges: list[dict[str, str]] = []
@@ -880,6 +908,42 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
                         f"logged in production_artifacts/clang_tidy_state.md."
                     ),
                     metrics={"logged_warning_count": warn_count},
+                )
+            )
+
+    for name, findings in sorted(cppcheck_data.items()):
+        if name in targets_out and findings:
+            cid = f"REF-CPPCHECK-{name}"
+            candidates.append(
+                make_candidate(
+                    cid=cid,
+                    kind="verification_sync",
+                    skill="audit-static",
+                    cand_targets=[name],
+                    impact_score=round(min(1.0, 0.20 * len(findings)), 3),
+                    summary=(
+                        f"Cppcheck advisory scan identified {len(findings)} design suggestion(s) "
+                        f"in targets/{name}/."
+                    ),
+                    metrics={"cppcheck_findings": len(findings)},
+                )
+            )
+
+    for name, suggestions in sorted(iwyu_data.items()):
+        if name in targets_out and suggestions:
+            cid = f"REF-IWYU-{name}"
+            candidates.append(
+                make_candidate(
+                    cid=cid,
+                    kind="contract_insulation",
+                    skill="audit-static",
+                    cand_targets=[name],
+                    impact_score=round(min(1.0, 0.15 * len(suggestions)), 3),
+                    summary=(
+                        f"Include-What-You-Use identified {len(suggestions)} header recommendation(s) "
+                        f"in targets/{name}/."
+                    ),
+                    metrics={"iwyu_suggestions": len(suggestions)},
                 )
             )
 

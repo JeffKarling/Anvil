@@ -1,0 +1,75 @@
+{
+  "item_store": [
+    {
+      "id": "useStlAlgorithm",
+      "severity": "style",
+      "message": "Consider using std::transform algorithm instead of a raw loop.",
+      "cwe": "398",
+      "locations": [
+        "/home/ello/Programming/New Projects Folder/Anvil/targets/item_store/item_store.cpp:43"
+      ]
+    },
+    {
+      "id": "syntaxError",
+      "severity": "error",
+      "message": "syntax error",
+      "cwe": null,
+      "locations": [
+        "/home/ello/Programming/New Projects Folder/Anvil/targets/item_store/item_storeTEST/item_storeTEST.cpp:11"
+      ]
+    }
+  ],
+  "journal": [
+    {
+      "id": "useStlAlgorithm",
+      "severity": "style",
+      "message": "Consider using std::transform algorithm instead of a raw loop.",
+      "cwe": "398",
+      "locations": [
+        "/home/ello/Programming/New Projects Folder/Anvil/targets/journal/journalTEST/journalTEST.cpp:551"
+      ]
+    }
+  ],
+  "journal_signal_adapter": [
+    {
+      "id": "passedByValue",
+      "severity": "performance",
+      "message": "Function parameter 'debug_policy' should be passed by const reference.",
+      "cwe": "398",
+      "locations": [
+        "/home/ello/Programming/New Projects Folder/Anvil/targets/journal_signal_adapter/journal_signal_adapter.cpp:41"
+      ]
+    },
+    {
+      "id": "passedByValue",
+      "severity": "performance",
+      "message": "Function parameter 'debug_policy' should be passed by const reference.",
+      "cwe": "398",
+      "locations": [
+        "/home/ello/Programming/New Projects Folder/Anvil/targets/journal_signal_adapter/journal_signal_adapter.cpp:103"
+      ]
+    }
+  ],
+  "perf_scope": [
+    {
+      "id": "useStlAlgorithm",
+      "severity": "style",
+      "message": "Consider using std::accumulate algorithm instead of a raw loop.",
+      "cwe": "398",
+      "locations": [
+        "/home/ello/Programming/New Projects Folder/Anvil/targets/perf_scope/perf_scopeTEST/perf_scopeTEST.cpp:26"
+      ]
+    }
+  ],
+  "tbb_transform": [
+    {
+      "id": "syntaxError",
+      "severity": "error",
+      "message": "syntax error",
+      "cwe": null,
+      "locations": [
+        "/home/ello/Programming/New Projects Folder/Anvil/targets/tbb_transform/tbb_transformTEST/tbb_transformTEST.cpp:11"
+      ]
+    }
+  ]
+}

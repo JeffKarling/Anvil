@@ -483,6 +483,171 @@
       },
       "discovered_at_commit": "586331abe8fc",
       "user_directive": "ignored"
+    },
+    {
+      "id": "REF-CPPCHECK-item_store",
+      "kind": "verification_sync",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "item_store"
+      ],
+      "impact_score": 0.4,
+      "summary": "Cppcheck advisory scan identified 2 design suggestion(s) in targets/item_store/.",
+      "metrics": {
+        "cppcheck_findings": 2
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-CPPCHECK-journal",
+      "kind": "verification_sync",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "journal"
+      ],
+      "impact_score": 0.2,
+      "summary": "Cppcheck advisory scan identified 1 design suggestion(s) in targets/journal/.",
+      "metrics": {
+        "cppcheck_findings": 1
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-CPPCHECK-journal_signal_adapter",
+      "kind": "verification_sync",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "journal_signal_adapter"
+      ],
+      "impact_score": 0.4,
+      "summary": "Cppcheck advisory scan identified 2 design suggestion(s) in targets/journal_signal_adapter/.",
+      "metrics": {
+        "cppcheck_findings": 2
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-CPPCHECK-perf_scope",
+      "kind": "verification_sync",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "perf_scope"
+      ],
+      "impact_score": 0.2,
+      "summary": "Cppcheck advisory scan identified 1 design suggestion(s) in targets/perf_scope/.",
+      "metrics": {
+        "cppcheck_findings": 1
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-CPPCHECK-tbb_transform",
+      "kind": "verification_sync",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "tbb_transform"
+      ],
+      "impact_score": 0.2,
+      "summary": "Cppcheck advisory scan identified 1 design suggestion(s) in targets/tbb_transform/.",
+      "metrics": {
+        "cppcheck_findings": 1
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-IWYU-app",
+      "kind": "contract_insulation",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "app"
+      ],
+      "impact_score": 0.15,
+      "summary": "Include-What-You-Use identified 1 header recommendation(s) in targets/app/.",
+      "metrics": {
+        "iwyu_suggestions": 1
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-IWYU-item_proto",
+      "kind": "contract_insulation",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "item_proto"
+      ],
+      "impact_score": 0.15,
+      "summary": "Include-What-You-Use identified 1 header recommendation(s) in targets/item_proto/.",
+      "metrics": {
+        "iwyu_suggestions": 1
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-IWYU-item_store",
+      "kind": "contract_insulation",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "item_store"
+      ],
+      "impact_score": 1.0,
+      "summary": "Include-What-You-Use identified 7 header recommendation(s) in targets/item_store/.",
+      "metrics": {
+        "iwyu_suggestions": 7
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-IWYU-journal",
+      "kind": "contract_insulation",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "journal"
+      ],
+      "impact_score": 0.75,
+      "summary": "Include-What-You-Use identified 5 header recommendation(s) in targets/journal/.",
+      "metrics": {
+        "iwyu_suggestions": 5
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-IWYU-journal_signal_adapter",
+      "kind": "contract_insulation",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "journal_signal_adapter"
+      ],
+      "impact_score": 0.75,
+      "summary": "Include-What-You-Use identified 5 header recommendation(s) in targets/journal_signal_adapter/.",
+      "metrics": {
+        "iwyu_suggestions": 5
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
+    },
+    {
+      "id": "REF-IWYU-tbb_transform",
+      "kind": "contract_insulation",
+      "recommended_skill": "audit-static",
+      "targets": [
+        "tbb_transform"
+      ],
+      "impact_score": 1.0,
+      "summary": "Include-What-You-Use identified 7 header recommendation(s) in targets/tbb_transform/.",
+      "metrics": {
+        "iwyu_suggestions": 7
+      },
+      "discovered_at_commit": "8b003ce6a1b5",
+      "user_directive": "ignored"
     }
   ]
 }

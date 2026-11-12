@@ -1,0 +1,118 @@
+{
+  "app": [
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/app/app.cpp",
+      "suggestion": "#include <optional>                                           // for optional"
+    }
+  ],
+  "item_proto": [
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/item_proto/item_protoTEST/item_protoTEST.cpp",
+      "suggestion": "#include <string>                      // for basic_string"
+    }
+  ],
+  "item_store": [
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/item_store/item_store.cpp",
+      "suggestion": "#include <google/protobuf/repeated_ptr_field.h>  // for RepeatedPtrField"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/item_store/item_storeTEST/item_storeTEST.cpp",
+      "suggestion": "#include <optional>                   // for optional"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/item_store/item_storeTEST/item_storeTEST.cpp",
+      "suggestion": "#include <span>                       // for span"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/item_store/item_storeTEST/item_storeTEST.cpp",
+      "suggestion": "#include <string>                     // for basic_string"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/item_store/item_storeTEST/item_storeTEST.cpp",
+      "suggestion": "#include \"journal/journal.hpp\"        // for is_valid_catalog"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/item_store/item_storeBENCH/item_storeBENCH.cpp",
+      "suggestion": "#include <span>                       // for span"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/item_store/item_storeBENCH/item_storeBENCH.cpp",
+      "suggestion": "#include <string>                     // for basic_string, operator<<"
+    }
+  ],
+  "journal": [
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal/journal.cpp",
+      "suggestion": "#include <tuple>             // for get"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal/journal_sink.cpp",
+      "suggestion": "#include <string>                // for char_traits"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal/journal_sink.cpp",
+      "suggestion": "struct iovec;"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal/journal_boundary.cpp",
+      "suggestion": "#include <source_location>      // for source_location"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal/journalTEST/journalTEST.cpp",
+      "suggestion": "#include <tuple>                // for get"
+    }
+  ],
+  "journal_signal_adapter": [
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal_signal_adapter/journal_signal_adapter.cpp",
+      "suggestion": "#include <array>                // for array"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal_signal_adapter/journal_signal_adapter.cpp",
+      "suggestion": "#include \"journal/journal.hpp\"  // for policy, log, message, severity, activ..."
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal_signal_adapter/journal_signal_adapterTEST/journal_signal_adapterTEST.cpp",
+      "suggestion": "#include <optional>                                           // for optional"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal_signal_adapter/journal_signal_adapterTEST/journal_signal_adapterTEST.cpp",
+      "suggestion": "#include <string>                                             // for basic_s..."
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/journal_signal_adapter/journal_signal_adapterTEST/journal_signal_adapterTEST.cpp",
+      "suggestion": "#include <utility>                                            // for move"
+    }
+  ],
+  "tbb_transform": [
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/tbb_transform/tbb_transform.cpp",
+      "suggestion": "#include <oneapi/tbb/detail/_namespace_injection.h>  // for tbb"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/tbb_transform/tbb_transform.cpp",
+      "suggestion": "#include <cstddef>                                   // for size_t"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/tbb_transform/tbb_transformTEST/tbb_transformTEST.cpp",
+      "suggestion": "#include <span>                             // for span"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/tbb_transform/tbb_transformTEST/tbb_transformTEST.cpp",
+      "suggestion": "#include <string>                           // for basic_string"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/tbb_transform/tbb_transformTEST/tbb_transformTEST.cpp",
+      "suggestion": "#include \"journal/journal.hpp\"              // for is_valid_catalog"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/tbb_transform/tbb_transformBENCH/tbb_transformBENCH.cpp",
+      "suggestion": "#include <span>                             // for span"
+    },
+    {
+      "file": "/home/ello/Programming/New Projects Folder/Anvil/targets/tbb_transform/tbb_transformBENCH/tbb_transformBENCH.cpp",
+      "suggestion": "#include <string>                           // for basic_string, operator<<"
+    }
+  ]
+}

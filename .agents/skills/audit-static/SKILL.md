@@ -9,35 +9,42 @@ description: >-
 
 ## Step 1. Clang-Tidy analysis
 
+Execute Clang-Tidy under the dedicated analysis preset.
+
 ```bash
 cmake --preset Clang_Tidy
 cmake --build --preset Clang_Tidy
 ```
 
-Fix bugprone, analyzer, and core guideline findings immediately. Log intentional situational exceptions in `production_artifacts/clang_tidy_state.md`.
+Category A defects halt the build automatically. Log intentional Category B situational exceptions in `production_artifacts/clang_tidy_state.md`.
 
-## Step 2. Cppcheck scan
+## Step 2. Advisory Cppcheck scan
+
+Run Cppcheck in advisory mode against `compile_commands.json` without modifying CMake cache flags.
 
 ```bash
-cmake --preset GNU_Custom_Debug -DENABLE_CPPCHECK=ON
-cmake --build --preset GNU_Custom_Debug
+python3 .agents/skills/audit-static/scripts/scan_advisory.py --cppcheck
 ```
 
-## Step 3. Include-What-You-Use header hygiene
+Findings are parsed into structured records in `production_artifacts/cppcheck_report.json` and converted into manifest refactor tickets.
+
+## Step 3. Advisory Include-What-You-Use scan
+
+Run Include-What-You-Use to audit public contract hygiene and forward declaration opportunities.
 
 ```bash
-cmake --preset GNU_Custom_Debug -DENABLE_IWYU=ON
-cmake --build --preset GNU_Custom_Debug
+python3 .agents/skills/audit-static/scripts/scan_advisory.py --iwyu
 grep -rn '#include "' targets/
 ```
 
-Ensure every file directly includes the headers it uses via `<...>` and remove unused transitive includes.
+Suggestions are saved to `production_artifacts/iwyu_report.json` and converted into `contract_insulation` refactor candidates. Ensure all target headers use angle brackets.
 
-## Step 4. Strict warning gate reset
+## Step 4. Manifest synchronization and multi compiler verification
 
-Reset analysis flags and verify zero warnings under both compilers with warnings treated as errors.
+Synchronize [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json) with newly generated scanner candidates and verify dual compiler builds.
 
 ```bash
-cmake --preset GNU_Custom_Debug -DENABLE_IWYU=OFF -DENABLE_CPPCHECK=OFF -DENABLE_WARNING_AS_ERROR=ON && cmake --build --preset GNU_Custom_Debug
-cmake --preset Clang_Custom_Debug -DENABLE_WARNING_AS_ERROR=ON && cmake --build --preset Clang_Custom_Debug
+python3 .agents/skills/architect/scripts/sync_manifest.py --check
+cmake --build --preset GNU_Custom_Debug
+cmake --build --preset Clang_Custom_Debug
 ```
