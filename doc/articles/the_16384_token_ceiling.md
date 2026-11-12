@@ -29,7 +29,7 @@ Modern frontier models support context windows exceeding one million tokens. How
 
 As context length expands, attention distribution thins across the sequence. Models experience subtle recall degradation, needle retrieval failures, and instruction drift when reasoning across deep, unconstrained contexts.
 
-At 16384 tokens, frontier models operate in their peak dense attention sweet spot. Needle retrieval, cross file type inference, and variable tracking operate with near perfect fidelity. Bounding components to 16384 tokens guarantees that a [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) never experiences cognitive fog or attention dilution.
+At 16384 tokens, frontier models operate in their peak dense attention sweet spot. Needle retrieval, cross file type inference, and variable tracking operate with near perfect fidelity. Bounding components to 16384 tokens guarantees that a [tactical_worker](../../.agents/agents/tactical_worker/agent.json) never experiences cognitive fog or attention dilution.
 
 ## Turn headroom in the edit compile test loop
 
@@ -41,7 +41,7 @@ By bounding the static source code $W(C_i)$ within 16384 tokens, the worker reta
 
 ## The mathematical trigger for invariant gate H5
 
-In Anvil, $B_{\max}$ acts as the threshold for Invariant Gate $H_5$ in [sync_manifest.py](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/skills/architect/scripts/sync_manifest.py).
+In Anvil, $B_{\max}$ acts as the threshold for Invariant Gate $H_5$ in [sync_manifest.py](../../.agents/skills/architect/scripts/sync_manifest.py).
 
 Whenever the combined token footprint of a component and its direct upstream headers exceeds 16384 tokens, the gate fails immediately.
 
@@ -55,7 +55,7 @@ In the sizing equation, $B_{\max}$ normalizes the context saturation term.
 
 $$\text{saturation} = \frac{W(C_i)}{B_{\max}}$$
 
-This keeps the saturation metric bounded between 0.0 and 1.0. A component approaching 16384 tokens receives a high saturation score that pushes its worker sizing $\Psi(C_i)$ into the `pro` tier. Compact components stay near 0.20 saturation, allowing the [monitor](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/monitor/agent.json) supervisor to dispatch fast, cost effective `flash` workers.
+This keeps the saturation metric bounded between 0.0 and 1.0. A component approaching 16384 tokens receives a high saturation score that pushes its worker sizing $\Psi(C_i)$ into the `pro` tier. Compact components stay near 0.20 saturation, allowing the [monitor](../../.agents/agents/monitor/agent.json) supervisor to dispatch fast, cost effective `flash` workers.
 
 ## Concurrency without token explosion
 

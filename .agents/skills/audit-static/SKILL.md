@@ -41,7 +41,7 @@ Suggestions are saved to `production_artifacts/iwyu_report.json` and converted i
 
 ## Step 4. Manifest synchronization and multi compiler verification
 
-Synchronize [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json) with newly generated scanner candidates and verify dual compiler builds.
+Synchronize [manifest.json](../../../production_artifacts/manifest.json) with newly generated scanner candidates and verify dual compiler builds.
 
 ```bash
 python3 .agents/skills/architect/scripts/sync_manifest.py --check

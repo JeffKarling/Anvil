@@ -30,25 +30,25 @@ Good architecture is ultimately applied information theory. By strictly bounding
 * Static analysis tools `clang-tidy`, `cppcheck`, and `include-what-you-use`
 * Profiling tool `perf`
 * Core test discovery framework GoogleTest via CMake or PkgConfig
-* Exemplar libraries in [cmake/dependencies.cmake](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/cmake/dependencies.cmake) for template starter components, including `libsystemd` for `journal` and sample packages `protobuf` and `tbb`
+* Exemplar libraries in [cmake/dependencies.cmake](cmake/dependencies.cmake) for template starter components, including `libsystemd` for `journal` and sample packages `protobuf` and `tbb`
 
 ## Documentation directory
 
 ### Engineering manuals and prompt cookbooks
 
-* **[General engineering manual](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/MANUAL.md).** Comprehensive systems manual covering ACCC mathematical graph synthesis, invariant gates $H_1$ through $H_5$, worker sizing scores $\Psi$, and dependency insulation.
-* **[Human prompt cookbook and workflows](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/guides/prompts.md).** Tested prompt templates and workflows for greenfield project bootstrap, senior developer refactor review, hardware PMU benchmarking, and ad hoc git resynchronization.
+* **[General engineering manual](doc/MANUAL.md).** Comprehensive systems manual covering ACCC mathematical graph synthesis, invariant gates $H_1$ through $H_5$, worker sizing scores $\Psi$, and dependency insulation.
+* **[Human prompt cookbook and workflows](doc/guides/prompts.md).** Tested prompt templates and workflows for greenfield project bootstrap, senior developer refactor review, hardware PMU benchmarking, and ad hoc git resynchronization.
 * **[Anvil Template](https://github.com/JeffKarling/AnvilTemplate).** Cleaned starter blueprint stripped of exemplar components and documentation, preserving only the root prompt cheat sheet.
 
 ### Deep dive architectural articles
 
-* **[Trust the algorithm in systems architecture](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/trust_the_algorithm.md).** Discrete mathematical partitioning versus human narrative taxonomy in AI system design.
-* **[The Protobuf pedagogic example](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/protobuf_pedagogic_example.md).** Case study demonstrating why splitting single consumer schemas causes scaffolding drag.
-* **[Verification philosophy in agentic physical design](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/tactical_and_strategic_verifiers.md).** Adversarial verification, independent auditors, and preventing reward hacking in parallel subagents.
-* **[Compiler boundaries over prompt rule bloat](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/compiler_boundaries_over_prompt_rules.md).** Replacing fragile prompt rules with physical compiler walls while adapting to accelerating model release velocity.
-* **[How Anvil verifiers compare to Swarm](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/how_anvils_verifiers_compare_to_swarm.md).** Physical target verification versus shared conversational feeds in multi agent systems.
-* **[The 16384 token ceiling in physical component design](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/the_16384_token_ceiling.md).** Information theory, attention degradation, and binary power sizing in agentic context windows.
+* **[Trust the algorithm in systems architecture](doc/articles/trust_the_algorithm.md).** Discrete mathematical partitioning versus human narrative taxonomy in AI system design.
+* **[The Protobuf pedagogic example](doc/articles/protobuf_pedagogic_example.md).** Case study demonstrating why splitting single consumer schemas causes scaffolding drag.
+* **[Verification philosophy in agentic physical design](doc/articles/tactical_and_strategic_verifiers.md).** Adversarial verification, independent auditors, and preventing reward hacking in parallel subagents.
+* **[Compiler boundaries over prompt rule bloat](doc/articles/compiler_boundaries_over_prompt_rules.md).** Replacing fragile prompt rules with physical compiler walls while adapting to accelerating model release velocity.
+* **[How Anvil verifiers compare to Swarm](doc/articles/how_anvils_verifiers_compare_to_swarm.md).** Physical target verification versus shared conversational feeds in multi agent systems.
+* **[The 16384 token ceiling in physical component design](doc/articles/the_16384_token_ceiling.md).** Information theory, attention degradation, and binary power sizing in agentic context windows.
 
 ## License
 
-Licensed under [MIT-0](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/LICENSE).
+Licensed under [MIT-0](LICENSE).

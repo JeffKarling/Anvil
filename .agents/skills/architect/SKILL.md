@@ -17,8 +17,8 @@ python3 .agents/skills/architect/scripts/sync_manifest.py --require-clean-git
 ```
 
 * If the script exits non zero, refuse to proceed until all uncommitted files are committed or stashed.
-* Review [cmake/dependencies.cmake](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/cmake/dependencies.cmake) and [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json) before delegating work.
-* Inspect refactor candidates in [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json). Execute any topology repartition candidate marked approved by the user.
+* Review [cmake/dependencies.cmake](../../../cmake/dependencies.cmake) and [manifest.json](../../../production_artifacts/manifest.json) before delegating work.
+* Inspect refactor candidates in [manifest.json](../../../production_artifacts/manifest.json). Execute any topology repartition candidate marked approved by the user.
 * Clarify ambiguous input types, contracts, or failure modes with the user before dispatching the strategic worker.
 
 ## Step 2. Dispatch strategic worker to partition capabilities and scaffold targets
@@ -73,8 +73,8 @@ Once the strategic worker finishes, verify the public contracts before committin
 
 Keep the monitor context free of private `.cpp` implementations and mechanical compiler loops.
 
-1. Ensure [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) and [tactical_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_verifier/agent.json) are registered.
-2. Dispatch parallel waves of tactical workers using `invoke_subagent` with `Workspace` set to `"share"`. Set `Model` from `subagent_model` in [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json) using `flash` for $\Psi(C_i) < 0.70$ and `pro` for $\Psi(C_i) \ge 0.70$.
+1. Ensure [tactical_worker](../../agents/tactical_worker/agent.json) and [tactical_verifier](../../agents/tactical_verifier/agent.json) are registered.
+2. Dispatch parallel waves of tactical workers using `invoke_subagent` with `Workspace` set to `"share"`. Set `Model` from `subagent_model` in [manifest.json](../../../production_artifacts/manifest.json) using `flash` for $\Psi(C_i) < 0.70$ and `pro` for $\Psi(C_i) \ge 0.70$.
 
 ```json
 {
@@ -96,7 +96,7 @@ Keep the monitor context free of private `.cpp` implementations and mechanical c
 
 ## Step 5. Whole graph verification and final release gate
 
-Once all components merge cleanly, verify the integrated system across compilers and synchronize [manifest.json](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/production_artifacts/manifest.json).
+Once all components merge cleanly, verify the integrated system across compilers and synchronize [manifest.json](../../../production_artifacts/manifest.json).
 
 ```bash
 ./production_artifacts/build_all.sh custom debug

@@ -28,11 +28,11 @@ Every component in Anvil occupies a physical directory under `targets/<name>/`. 
 
 This physical separation transforms how agents collaborate across three fundamental dimensions.
 
-**Bounded context locality.** A [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) never reads a running chat feed of what other workers are doing. It loads only its assigned directory and the public headers of direct upstream dependencies. Total worker context remains bounded within $B_{\max} = 16384$ tokens. Ten workers can run in parallel without multiplying token overhead across each other.
+**Bounded context locality.** A [tactical_worker](../../.agents/agents/tactical_worker/agent.json) never reads a running chat feed of what other workers are doing. It loads only its assigned directory and the public headers of direct upstream dependencies. Total worker context remains bounded within $B_{\max} = 16384$ tokens. Ten workers can run in parallel without multiplying token overhead across each other.
 
 **Isolated shared worktrees.** Antigravity provisions workers in isolated Git worktrees branched from `HEAD`. Because each worker operates in a separate physical filesystem directory, parallel agents never collide on files or produce merge conflicts.
 
-**Adversarial verification without social bias.** In Anvil, verification is adversarial and unyielding. The [tactical_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_verifier/agent.json) never debates the worker. It inspects the candidate diff from a clean, read only perspective. It checks whether unit test assertions were diluted, whether mocks were introduced to bypass real hardware, and whether benchmark workloads were gamed.
+**Adversarial verification without social bias.** In Anvil, verification is adversarial and unyielding. The [tactical_verifier](../../.agents/agents/tactical_verifier/agent.json) never debates the worker. It inspects the candidate diff from a clean, read only perspective. It checks whether unit test assertions were diluted, whether mocks were introduced to bypass real hardware, and whether benchmark workloads were gamed.
 
 ## Compilers and hardware as the ultimate arbiters
 
@@ -40,7 +40,7 @@ The deepest difference between Swarm and Anvil lies in where authority resides.
 
 In a conversational swarm, authority is social. The agents decide a feature is complete when their shared discussion reaches consensus.
 
-In Anvil, authority is mechanical. The supervising [monitor](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/monitor/agent.json) accepts a component only when objective machine gates pass.
+In Anvil, authority is mechanical. The supervising [monitor](../../.agents/agents/monitor/agent.json) accepts a component only when objective machine gates pass.
 
 Both Clang and GCC must compile the code cleanly under strict warning flags. The unit tests must execute and pass without assertion failures. Runtime sanitizers must report zero memory leaks, buffer overruns, or undefined behavior. Clang-Tidy Category A safety checks must clear with zero errors. In compute components, hardware PMU counters must record valid instruction retirements and cache metrics.
 

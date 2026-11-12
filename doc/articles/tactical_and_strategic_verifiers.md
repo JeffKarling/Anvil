@@ -24,17 +24,17 @@ Relying on a single prompt or self review loop cannot eliminate these behaviors.
 
 To ensure complete verification independence, Anvil separates responsibilities across three distinct tiers:
 
-* **The supervisor tier.** The [monitor](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/monitor/agent.json) operates as a deterministic state machine. It manages the lifecycle sequence, dispatches subagents, and commits verified artifacts. It never authors C++ implementations or edits public contracts directly.
-* **The strategic tier.** The [strategic_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_worker/agent.json) authors physical target topologies, public headers, and error catalogs. The [strategic_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_verifier/agent.json) acts as an independent critic evaluating public interface hygiene and invariant gates $H_1$ through $H_5$.
-* **The tactical tier.** The [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) authors private implementations and unit tests inside isolated Git worktrees. The [tactical_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_verifier/agent.json) audits candidate diffs to catch test dilution and cheating before merging.
+* **The supervisor tier.** The [monitor](../../.agents/agents/monitor/agent.json) operates as a deterministic state machine. It manages the lifecycle sequence, dispatches subagents, and commits verified artifacts. It never authors C++ implementations or edits public contracts directly.
+* **The strategic tier.** The [strategic_worker](../../.agents/agents/strategic_worker/agent.json) authors physical target topologies, public headers, and error catalogs. The [strategic_verifier](../../.agents/agents/strategic_verifier/agent.json) acts as an independent critic evaluating public interface hygiene and invariant gates $H_1$ through $H_5$.
+* **The tactical tier.** The [tactical_worker](../../.agents/agents/tactical_worker/agent.json) authors private implementations and unit tests inside isolated Git worktrees. The [tactical_verifier](../../.agents/agents/tactical_verifier/agent.json) audits candidate diffs to catch test dilution and cheating before merging.
 
 ## The tactical duo of worker and verifier
 
-At the component level, Anvil divides labor into a sequential duo consisting of a [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) and a [tactical_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_verifier/agent.json).
+At the component level, Anvil divides labor into a sequential duo consisting of a [tactical_worker](../../.agents/agents/tactical_worker/agent.json) and a [tactical_verifier](../../.agents/agents/tactical_verifier/agent.json).
 
 ### The tactical worker
 
-The [tactical_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_worker/agent.json) owns private implementation and mechanical build loops inside an isolated Git worktree.
+The [tactical_worker](../../.agents/agents/tactical_worker/agent.json) owns private implementation and mechanical build loops inside an isolated Git worktree.
 
 Operating under a strict $B_{\max} = 16384$ token ceiling, the worker reads only its assigned directory under `targets/<name>/` and the public headers of direct upstream dependencies. It writes `targets/<name>/<name>.cpp`, `targets/<name>/<name>TEST/`, and optional benchmark targets under `targets/<name>/<name>BENCH/`.
 
@@ -42,7 +42,7 @@ The worker is responsible for all mechanical compilation loops. It builds scoped
 
 ### The tactical verifier
 
-Once the worker completes its task, the monitor invokes [tactical_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/tactical_verifier/agent.json).
+Once the worker completes its task, the monitor invokes [tactical_verifier](../../.agents/agents/tactical_verifier/agent.json).
 
 The tactical verifier is strictly read only and holds no file editing tools. Running in the primary workspace against the candidate diff, it audits the worker output before any change is committed to the main branch.
 
@@ -58,7 +58,7 @@ If the tactical verifier discovers test dilution or contract violations, the can
 
 A component can pass all unit tests while the overall system fails. Because the tactical verifier is scoped to one directory, it cannot detect dropped system requirements, broken cross target integration, or architectural coupling.
 
-To solve this, Anvil pairs the [strategic_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_worker/agent.json) with an independent [strategic_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_verifier/agent.json).
+To solve this, Anvil pairs the [strategic_worker](../../.agents/agents/strategic_worker/agent.json) with an independent [strategic_verifier](../../.agents/agents/strategic_verifier/agent.json).
 
 The `strategic_verifier` is a read only agent that audits the global dependency graph and public contracts across two specific checkpoints.
 
@@ -116,7 +116,7 @@ While this creates overlapping compute, the separation of concerns provides sign
 
 The strategic tier follows the identical verification philosophy.
 
-The [strategic_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_worker/agent.json) must fix all hard faults before presenting contracts. Invariant gates $H_1$ through $H_5$ must pass, quoted includes are forbidden, and vendor headers must never leak. If any hard gate fails, the [strategic_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_verifier/agent.json) rejects the contracts and the monitor re-dispatches the worker.
+The [strategic_worker](../../.agents/agents/strategic_worker/agent.json) must fix all hard faults before presenting contracts. Invariant gates $H_1$ through $H_5$ must pass, quoted includes are forbidden, and vendor headers must never leak. If any hard gate fails, the [strategic_verifier](../../.agents/agents/strategic_verifier/agent.json) rejects the contracts and the monitor re-dispatches the worker.
 
 Softer architectural observations do not block progress. Heavy standard library includes across multiple callers or potential 2-to-1 component merges are recorded in [manifest.json](../../production_artifacts/manifest.json) for human review.
 

@@ -38,6 +38,6 @@ How the model writes the private `.cpp` implementation is left entirely to its i
 
 ## Trusting the evolving intelligence
 
-By stepping back from private syntax micromanagement, Anvil establishes a durable foundation for autonomous engineering. Human developers and the [monitor](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/monitor/agent.json) supervisor define system topology, public interfaces, and mathematical gates. Frontier models handle the implementation details within those bounded sandboxes.
+By stepping back from private syntax micromanagement, Anvil establishes a durable foundation for autonomous engineering. Human developers and the [monitor](../../.agents/agents/monitor/agent.json) supervisor define system topology, public interfaces, and mathematical gates. Frontier models handle the implementation details within those bounded sandboxes.
 
 This hands off philosophy keeps agent attention focused where it matters. Because context windows are unburdened by negative checklists, models write idiomatic, high performance code naturally. As frontier models continue their rapid evolution, Anvil harnesses their expanding intelligence without changing the underlying architecture.
