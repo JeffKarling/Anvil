@@ -66,7 +66,7 @@ The anchor constrained capability contraction algorithm groups capabilities into
 * **Anchor preservation.** Foundational repository anchors like `journal`, `perf_scope`, and `app` must never be merged into other components because shared observability and entrypoints must stay globally independent.
 * **Execution and verification parity.** Pure in memory compute kernels are never merged with stateful OS or I/O boundaries. This ensures compute components receive deterministic hardware PMU benchmarks while boundary components stay focused on Lippincott exception firewalls.
 * **Compiler regime homogeneity.** Capabilities requiring specialized compiler flags like `-fno-fast-math`, SIMD overrides, or private C++23 features are isolated into their own components so non standard flags never leak into unrelated code.
-* **Context locality.** The combined public and private token footprint of a component and its direct upstream headers must not exceed the worker subagent context ceiling $B_{\max} = 16384$ so every worker fits its entire task in working memory without truncation.
+* **Context locality.** The combined public and private token footprint of a component and its direct upstream headers must not exceed the worker subagent context ceiling $B_{\max} = 16384$ so every worker fits its entire task in working memory without truncation. For an in depth breakdown of why this exact constant is selected, read **[The 16384 token ceiling in physical component design](articles/the_16384_token_ceiling.md)**.
 
 Within this feasible space, the algorithm minimizes a **friction cost function** balancing four physical forces.
 
