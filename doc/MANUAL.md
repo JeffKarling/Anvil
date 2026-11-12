@@ -98,7 +98,7 @@ Both $\Psi(C_i)$ and the selected `Model` tier are persisted inside `production_
 
 The project provides hand crafted example components in `targets/` to demonstrate physical encapsulation in code. Proto requirement is split into two components in [item_proto](../targets/item_proto) and [item_store](../targets/item_store). This hand crafted two component design is objectively wrong as both targets include the same protobuf generated code, keeping it serves an educational purpose demonstrating less optimal component design.
 
-In production, human engineers should never hand craft or prescribe whether a Protobuf schema is split or merged. The core philosophy of Anvil is to trust the **anchor constrained capability contraction algorithm** to make the correct decision. For the worked Protobuf case study, read **[The Protobuf pedagogic example](articles/protobuf_pedagogic_example.md)**, and for the broader lifecycle philosophy read **[Trust the algorithm in systems architecture](articles/trust_the_algorithm.md)**.
+In production, human engineers should never hand craft or prescribe whether a Protobuf schema is split or merged. The core philosophy of Anvil is to trust the **anchor constrained capability contraction algorithm** to make the correct decision. For the worked Protobuf case study, read **[The Protobuf pedagogic example](articles/protobuf_pedagogic_example.md)**, for the broader lifecycle philosophy read **[Trust the algorithm in systems architecture](articles/trust_the_algorithm.md)**, and for adversarial verification read **[Verification philosophy in agentic physical design](articles/tactical_and_strategic_verifiers.md)**.
 
 ### How the algorithm calculates component boundaries
 
