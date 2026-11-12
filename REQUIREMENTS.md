@@ -107,7 +107,7 @@ The build system must be configured to package the release application into an i
 
 ## Architectural constraints and orchestrator execution rules
 
-The Argon orchestrator and all spawned `tactical_worker` subagents must strictly obey [.agents/rules/invariants.md](.agents/rules/invariants.md) and [.agents/skills/architect/SKILL.md](.agents/skills/architect/SKILL.md) throughout implementation.
+The primary orchestrator and all spawned `tactical_worker` subagents must strictly obey [.agents/rules/invariants.md](.agents/rules/invariants.md) and [.agents/skills/architect/SKILL.md](.agents/skills/architect/SKILL.md) throughout implementation.
 
 **Delegate naming and topology to ACCC.** Aside from retaining the four mandatory anchor target names `journal`, `journal_signal_adapter`, `perf_scope`, and `app`, the orchestrator has full autonomy to select component names, helper unit splits, and internal C++ namespaces under `anvil::<name>` according to the mathematical partition friction score $\Phi(P)$.
 

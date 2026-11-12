@@ -7,7 +7,7 @@ description: >-
 
 # Agentic DAG architecture workflow
 
-Use this workflow as the strategic manager on Gemini 4 Argon to translate requirements into a logical capability graph and contract it into physical targets. Orchestrate tactical workers across isolated Antigravity shared Git worktrees to implement the contracted graph.
+You must act as the strategic orchestrator for this workflow regardless of which model is active. Gemini 4 Argon is recommended for this role because it assumes orchestration proactively, though the workflow is model agnostic. Translate requirements into a logical capability graph, contract it into physical targets, and orchestrate tactical workers across isolated Antigravity shared Git worktrees to implement the contracted graph.
 
 ## Step 1. Verify clean Git state, resync manifest, and translate requirements
 
