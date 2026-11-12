@@ -35,7 +35,7 @@ set_target_properties(${DIR_NAME} PROPERTIES
 
         CXX_INCLUDE_WHAT_YOU_USE "$<$<AND:$<BOOL:${ENABLE_IWYU}>,$<COMPILE_LANGUAGE:CXX>>:${IWYU_ARGS}>"
         CXX_CPPCHECK "$<$<AND:$<BOOL:${ENABLE_CPPCHECK}>,$<COMPILE_LANGUAGE:CXX>>:${CPPCHECK_ARGS}>"
-        CXX_CLANG_TIDY "$<$<AND:$<COMPILE_LANG_AND_ID:CXX,Clang>,$<CONFIG:Clang_Tidy>>:clang-tidy;--checks=-*,modernize*,cppcoreguidelines*,bugprone*,clang-analyzer*,concurrency*,google*,readability*,performance*,-modernize-use-trailing-return-type>"
+        CXX_CLANG_TIDY "$<$<AND:$<COMPILE_LANG_AND_ID:CXX,Clang>,$<CONFIG:Clang_Tidy>>:clang-tidy;--checks=-*,modernize*,cppcoreguidelines*,bugprone*,clang-analyzer*,concurrency*,google*,readability*,performance*,-modernize-use-trailing-return-type;--warnings-as-errors=clang-analyzer-*,bugprone-*,concurrency-*,-bugprone-easily-swappable-parameters>"
 
         EXPORT_COMPILE_COMMANDS ON
         DEBUG_POSTFIX _debug

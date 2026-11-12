@@ -79,6 +79,57 @@ After parallel worker waves land and the whole DAG compiles cleanly, the `strate
 
 At this gate, the verifier audits whole system deliverables. It verifies that multi compiler release builds succeed, integration executables under `targets/app` run properly, and zero dirty benchmarks remain in the profiling ledger.
 
+## The verifier decision rubric and separation of concerns
+
+A senior developer must walk the line between meeting delivery commitments and keeping the codebase clean. Failing a build on minor stylistic suggestions paralyzes development velocity. Conversely, ignoring safety defects or architectural leakage leads to technical debt and runtime crashes.
+
+Anvil solves this trade off by strictly separating hard faults from soft refactoring considerations.
+
+| Category | Defect or observation | Verifier action | Destination |
+| :--- | :--- | :--- | :--- |
+| Contract | Public header altered or vendor headers leaked | Hard fail | Reject diff and respawn worker |
+| Integrity | Test assertions weakened or dependencies mocked | Hard fail | Reject diff and respawn worker |
+| Safety | ASan, UBSan, or compiler warning as error | Hard fail | Reject diff and respawn worker |
+| Static safety | Clang-Tidy Category A analyzer or concurrency fault | Hard fail | Reject diff and respawn worker |
+| Situational design | Clang-Tidy Category B macro usage or vararg syscall | Pass & document | Log verification_sync in manifest.json |
+| Code smell | C style loop instead of std::views or missing forward | Pass & document | Log syntax_smell in manifest.json |
+| Coverage | Error catalog covered but soak edge case missing | Pass & document | Log test_strengthening in manifest.json |
+| Performance | Meets baseline but hardware PMU shows headroom | Pass & document | Log kernel_acceleration in manifest.json |
+
+### Category A hard fails versus Category B manifest tickets
+
+Clang-Tidy checks are partitioned into two operational regimes.
+
+**Category A safety critical defects.** These checks detect memory corruption, undefined behavior, concurrency hazards, and bugprone logic. In Anvil, Category A checks are configured with `--warnings-as-errors`. The tactical worker must loop and resolve every Category A issue before reporting completion. If any Category A defect slips through, the tactical verifier issues an immediate hard fail and rejects the diff.
+
+**Category B situational design considerations.** These checks detect patterns such as macro constants, vararg system calls, missing `std::forward`, or potential performance improvements. Many of these are valid in low level systems code. The tactical verifier audits these warnings, filters out stylistic noise, and logs them into [manifest.json](../../production_artifacts/manifest.json) under `refactor_candidates`. This creates an actionable ticket for future refactoring without blocking the release.
+
+**Filtering Category C stylistic noise.** Stylistic warnings such as identifier lengths and magic number diagnostics are ignored. Bothering developers and agents with trivia creates noise and distracts from core architectural integrity.
+
+### Deliberate duplication of static analysis runs
+
+The tactical worker runs Clang-Tidy during its private build loop. The tactical verifier executes Clang-Tidy again during its independent audit.
+
+While this creates overlapping compute, the separation of concerns provides significant architectural benefits. Compromising slightly on verification speed preserves strict modularity. The worker uses static analysis as a local compiler constraint to fix defects. The verifier uses static analysis as an objective audit tool to classify findings. Either agent can be updated or extended with additional checks without breaking the other.
+
+### Strategic verifier follows the same rubric
+
+The strategic tier follows the identical verification philosophy.
+
+The [strategic_worker](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_worker/agent.json) must fix all hard faults before presenting contracts. Invariant gates $H_1$ through $H_5$ must pass, quoted includes are forbidden, and vendor headers must never leak. If any hard gate fails, the [strategic_verifier](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/.agents/agents/strategic_verifier/agent.json) rejects the contracts and the monitor re-dispatches the worker.
+
+Softer architectural observations do not block progress. Heavy standard library includes across multiple callers or potential 2-to-1 component merges are recorded in [manifest.json](../../production_artifacts/manifest.json) for human review.
+
+### The role of performance benchmarking
+
+Performance benchmarks follow this exact hard versus soft distinction.
+
+During initial feature delivery, the tactical worker executes `<name>BENCH_run` exactly once. This single execution proves that the benchmark compiles, links, runs cleanly without crashes, and records baseline hardware counters.
+
+The worker does not attempt open-ended micro-optimizations during feature construction. Speculative tuning during initial implementation risks introducing regressions and wastes model tokens.
+
+If the hardware PMU counters indicate bottlenecks such as cache misses or low IPC, the finding is recorded in [manifest.json](../../production_artifacts/manifest.json) as a `kernel_acceleration` candidate. Active optimization occurs only when the user or monitor explicitly launches the dedicated performance optimization workflow.
+
 ## Physical boundaries as an audit firewall
 
 The layered verifier architecture in Anvil succeeds because it mirrors physical component boundaries.
