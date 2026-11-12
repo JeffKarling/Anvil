@@ -34,6 +34,7 @@ Inspect `production_artifacts/profiling/<component>_score_report.json` or run wh
 
 Execute optimization trials in isolated Antigravity shared Git worktrees by calling `invoke_subagent` with `TypeName: "tactical_worker"`, `Workspace: "share"`, and `Model: "pro"` while keeping `targets/<component>/<component>/<component>.hpp` and existing unit test assertions in `<component>TEST.cpp` unmodified.
 * Never delete, weaken, or bypass unit tests or exception firewalls to inflate benchmark scores.
+* Audit candidate trial diffs using `tactical_verifier` before committing to confirm unit test assertions in `<component>TEST.cpp` were not weakened to game benchmarks.
 * Prefer linking accelerated routines from `cmake/dependencies.cmake` privately over custom scalar loops.
 * When profiling shows a coarse compute bound loop with high IPC over contiguous `std::span` memory, encapsulate the kernel inside an anonymous namespace in `<component>.cpp` and apply multi versioning across the three standard tiers.
 

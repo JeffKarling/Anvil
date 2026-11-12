@@ -50,7 +50,7 @@ Complete all public contracts and persist the updated manifest before delegating
 
 Keep the strategic manager context free of private `.cpp` implementations and inner compiler loops.
 
-1. Ensure the `tactical_worker` subagent from `.agents/agents/tactical_worker/agent.json` is registered in the session, calling `define_subagent` with `name: "tactical_worker"` and `enable_write_tools: true` if not yet registered.
+1. Ensure both the `tactical_worker` subagent from `.agents/agents/tactical_worker/agent.json` and the `tactical_verifier` subagent from `.agents/agents/tactical_verifier/agent.json` are registered in the session.
 2. Dispatch parallel waves of tactical workers using `invoke_subagent` with `TypeName: "tactical_worker"`, `Workspace: "share"`, and `Model` set from `subagent_model` in `production_artifacts/manifest.json` (`flash` for $\Psi(C_i) < 0.70$ and `pro` for $\Psi(C_i) \ge 0.70$).
 
 ```json
@@ -68,8 +68,9 @@ Keep the strategic manager context free of private `.cpp` implementations and in
 ```
 
 3. Restrict each tactical worker to reading and editing only its assigned `targets/<name>/` directory plus reading the public `<dep>/<dep>.hpp` headers of its direct dependencies.
-4. Verify that each returned worker modifies only permitted files within `targets/<name>/` and passes unit tests and dual compiler debug builds before integrating and committing its changes on the main branch.
-5. If a downstream sanitizer or static analysis checkpoint fails on an integrated branch, bisect the commit ledger to identify the first offending commit. Quarantine its descendant subtree, hard reset to the last clean ancestor commit, and seed `<name>TEST` with a regression test reproducing the fault.
+4. When a worker completes, dispatch `tactical_verifier` via `invoke_subagent` with `TypeName: "tactical_verifier"`, `Workspace: "inherit"`, and `Model: "flash"` to audit the candidate changes in `targets/<name>/`. Verify that the public contract is unchanged, test assertions are preserved, benchmarks are non-trivial, and scoped builds and sanitizers pass.
+5. If `tactical_verifier` reports a clean pass, commit the component changes to the main branch. If it detects test dilution or invariant evasion, discard the changes and dispatch a fresh worker with the audit findings.
+6. If a downstream sanitizer or static analysis checkpoint fails on an integrated branch, bisect the commit ledger to identify the first offending commit. Quarantine its descendant subtree, hard reset to the last clean ancestor commit, and seed `<name>TEST` with a regression test reproducing the fault.
 
 ## Step 5. Whole graph verification and manifest resync
 
