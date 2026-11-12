@@ -2,23 +2,23 @@
 
 *'High velocity agentic C++ engineering forged on a strict physical component architecture.'*
 
-**Anvil** adapts the physical component model of **[Target Layout](https://github.com/JeffKarling/Target_Layout)** and the production verification harness of **[Target Layout Extended](https://github.com/JeffKarling/Target_Layout_Extended)** into a zero noise execution environment built exclusively for Google Antigravity.
+Anvil adapts the physical component model of [Target Layout](https://github.com/JeffKarling/Target_Layout) and the verification harness of [Target Layout Extended](https://github.com/JeffKarling/Target_Layout_Extended) into a zero noise execution environment built exclusively for Google Antigravity.
 
-This project is **opinionated** and only supports a Linux OS and Google Antigravity development environment.
+This project is opinionated and supports only a Linux OS and Google Antigravity development environment.
 
 ## The more things change, the more they stay the same
 
-Decades ago, John Lakos introduced physical component design to protect human engineers from cognitive overload and compounding coupling. In an era of autonomous AI systems, those foundational principles matter more than ever. Human short term memory has simply been replaced by the LLM context window, and team coordination overhead has become parallel subagent orchestration.
+Decades ago, John Lakos introduced physical component design to protect human engineers from cognitive overload and compounding coupling. In an era of autonomous AI systems, those foundational principles matter more than ever. Human short term memory has simply been replaced by the LLM context window. Team coordination overhead has become parallel subagent orchestration.
 
-Good architecture is ultimately applied information theory. By strictly bounding how much state an intelligent system must hold in context to make a safe change, **Anvil** turns thirty year old physical design rules into a force multiplier for modern agentic velocity.
+Good architecture is ultimately applied information theory. By strictly bounding how much state an intelligent system must hold in context to make a safe change, Anvil turns thirty year old physical design rules into a force multiplier for modern agentic velocity.
 
 ## How physical components unlock agentic speed
 
-* **Context window locality.** Strict one to one physical component boundaries allow a worker subagent to implement, test, and benchmark a capability inside a minimal token budget. Worker subagents read only the public interface headers of direct dependencies and never need to load upstream implementations into context.
-* **Mathematical DAG partitioning.** The orchestrator translates user requirements and the global dependency palette into capability vectors, then applies the anchor constrained capability contraction algorithm to synthesize wide, shallow component graphs under hard physical invariant gates.
-* **Orchestrator and isolated worker subagents.** A context light orchestrator authors public header contracts first and delegates private implementations to short lived worker subagents running in isolated workspaces. The orchestrator tracks optimization progress, detects plateau stalls, and rolls back failed branches automatically.
+* **Context window locality.** Strict one to one physical component boundaries allow a worker subagent to implement, test, and benchmark a capability inside a minimal token budget. Worker subagents read only the public interface headers of direct dependencies. They never load upstream implementations into context.
+* **Mathematical DAG partitioning.** The orchestrator translates user requirements and the global dependency palette into capability vectors. It applies the anchor constrained capability contraction algorithm to synthesize wide, shallow component graphs under hard physical invariant gates.
+* **Deterministic monitor and worker subagents.** A lightweight monitor supervisor coordinates strategic and tactical workers while gating progress with verifiers. Workers author clean contracts and implement private code in isolated shared worktrees.
 * **Zero token bloat.** Human tutorials, narrative documentation, and demonstration components are stripped from the active context window. Repository rules are compressed into dense machine invariants and minimal on demand skills that preserve LLM attention for engineering tasks.
-* **Mechanical scaffolding and anti reward hacking verification.** Boilerplate build configurations and component layouts are generated deterministically through skill scripts rather than prose instructions. Every component is gated by colocated unit tests, dual compiler static analysis, runtime sanitizers, and automated performance benchmarks.
+* **Mechanical scaffolding and adversarial verification.** Boilerplate build configurations and component layouts are generated deterministically through skill scripts. Every component is gated by colocated unit tests, dual compiler static analysis, runtime sanitizers, and automated performance benchmarks.
 * **Curated third party composition.** External libraries are declared centrally and linked privately behind clean domain headers. Worker subagents assemble high performance systems by composing approved libraries inside isolated leaf components with zero link time overhead.
 * **Production runtime backbone.** The workspace ships with a minimal foundation including lock free flight recorder logging, boundary exception firewalls, structured system log integration, and built in performance benchmarking.
 
@@ -30,14 +30,25 @@ Good architecture is ultimately applied information theory. By strictly bounding
 * Static analysis tools `clang-tidy`, `cppcheck`, and `include-what-you-use`
 * Profiling tool `perf`
 * Core test discovery framework GoogleTest via CMake or PkgConfig
-* Exemplar libraries in [cmake/dependencies.cmake](cmake/dependencies.cmake) for template starter components, including `libsystemd` for `journal` and sample packages `protobuf` and `tbb`
+* Exemplar libraries in [cmake/dependencies.cmake](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/cmake/dependencies.cmake) for template starter components, including `libsystemd` for `journal` and sample packages `protobuf` and `tbb`
 
-## Human engineering manual and architectural lineage
+## Documentation directory
 
-Read Manual **[MANUAL.md](doc/MANUAL.md)** for best practices on directing Anvil inside Google Antigravity. The manual explains how to curate third party libraries, write high level requirements specifications, and collaborate with the orchestrator across Git commits.
+### Engineering manuals and prompt cookbooks
 
-For an in depth architectural analysis on discrete mathematical partitioning over narrative taxonomy, read **[Trust the algorithm in systems architecture](doc/articles/trust_the_algorithm.md)**. For a concrete case study of the starter template's Protocol Buffers targets, read **[The Protobuf pedagogic example](doc/articles/protobuf_pedagogic_example.md)**. For the philosophy behind adversarial verification and the tactical duo, read **[Verification philosophy in agentic physical design](doc/articles/tactical_and_strategic_verifiers.md)**. For the rationale behind hands off private code and trusting model evolution, read **[Compiler boundaries over prompt rule bloat](doc/articles/compiler_boundaries_over_prompt_rules.md)**. For a comparison between physical target verification and shared conversational feeds, read **[How Anvil verifiers compare to Swarm](doc/articles/how_anvils_verifiers_compare_to_swarm.md)**. For the mathematical and attention economics behind component sizing, read **[The 16384 token ceiling in physical component design](doc/articles/the_16384_token_ceiling.md)**.
+* **[General engineering manual](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/MANUAL.md).** Comprehensive systems manual covering ACCC mathematical graph synthesis, invariant gates $H_1$ through $H_5$, worker sizing scores $\Psi$, and dependency insulation.
+* **[Human prompt cookbook and workflows](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/guides/prompts.md).** Tested prompt templates and workflows for greenfield project bootstrap, senior developer refactor review, hardware PMU benchmarking, and ad hoc git resynchronization.
+* **[Anvil Template](https://github.com/JeffKarling/AnvilTemplate).** Cleaned starter blueprint stripped of exemplar components and documentation, preserving only the root prompt cheat sheet.
+
+### Deep dive architectural articles
+
+* **[Trust the algorithm in systems architecture](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/trust_the_algorithm.md).** Discrete mathematical partitioning versus human narrative taxonomy in AI system design.
+* **[The Protobuf pedagogic example](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/protobuf_pedagogic_example.md).** Case study demonstrating why splitting single consumer schemas causes scaffolding drag.
+* **[Verification philosophy in agentic physical design](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/tactical_and_strategic_verifiers.md).** Adversarial verification, independent auditors, and preventing reward hacking in parallel subagents.
+* **[Compiler boundaries over prompt rule bloat](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/compiler_boundaries_over_prompt_rules.md).** Replacing fragile prompt rules with physical compiler walls while adapting to accelerating model release velocity.
+* **[How Anvil verifiers compare to Swarm](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/how_anvils_verifiers_compare_to_swarm.md).** Physical target verification versus shared conversational feeds in multi agent systems.
+* **[The 16384 token ceiling in physical component design](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/doc/articles/the_16384_token_ceiling.md).** Information theory, attention degradation, and binary power sizing in agentic context windows.
 
 ## License
 
-Licensed under [MIT-0](LICENSE).
+Licensed under [MIT-0](file:///home/ello/Programming/New%20Projects%20Folder/Anvil/LICENSE).
