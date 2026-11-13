@@ -28,35 +28,35 @@ Use this prompt to instruct [`monitor`](../../.agents/agents/monitor/agent.json)
 
 > "Act as the monitor supervisor. Review requirements in requirements.md and approved dependencies in cmake/dependencies.cmake. Dispatch strategic_worker to partition capabilities into physical targets, author public headers and error catalogs, and configure CMakeLists.txt. Verify the contract anchor with strategic_verifier, commit once invariant gates H1 through H5 pass, and proceed with tactical worker waves."
 
-## Senior developer refactor review workflow
+## Autonomous refactor telemetry workflow
 
-Anvil shifts code review away from line by line diff inspection toward reviewing structured telemetry in [manifest.json](../../production_artifacts/manifest.json). The manifest records `refactor_candidates` under four distinct kinds.
+Anvil shifts architectural maintenance away from line by line diff inspection and manual ticket approval toward continuous telemetry in [manifest.json](../../production_artifacts/manifest.json). The manifest records advisory `refactor_candidates` notes under four distinct kinds alongside their deterministic `benefit_score`, `standalone_rework_cost`, and `net_gain`.
 
-**Topology candidates.** Records marked `topology_repartition` indicate single consumer fan out contractions or high context saturation splits. These tasks require [`strategic_worker`](../../.agents/agents/strategic_worker/agent.json).
+**Topology notes.** Records marked `topology_repartition` indicate single consumer fan out contractions or high context saturation splits. These tasks are evaluated by [`strategic_worker`](../../.agents/agents/strategic_worker/agent.json) against incoming requirements and net gain thresholds.
 
-**Kernel acceleration candidates.** Records marked `kernel_acceleration` highlight PMU bottlenecks where hardware counters indicate further optimization is viable. These tasks require [`tactical_worker`](../../.agents/agents/tactical_worker/agent.json).
+**Kernel acceleration notes.** Records marked `kernel_acceleration` highlight PMU bottlenecks where hardware counters indicate further optimization is viable. These tasks are handled by [`tactical_worker`](../../.agents/agents/tactical_worker/agent.json).
 
-**Contract insulation candidates.** Records marked `contract_insulation` identify public headers pulling in heavy standard headers or uninsulated third party includes. These tasks require [`tactical_worker`](../../.agents/agents/tactical_worker/agent.json).
+**Contract insulation notes.** Records marked `contract_insulation` identify public headers pulling in heavy standard headers or uninsulated includes. These tasks are handled by [`strategic_worker`](../../.agents/agents/strategic_worker/agent.json) or [`tactical_worker`](../../.agents/agents/tactical_worker/agent.json).
 
-**Verification sync candidates.** Records marked `verification_sync` log situational Clang-Tidy or Cppcheck findings. These tasks require [`tactical_worker`](../../.agents/agents/tactical_worker/agent.json).
+**Verification sync notes.** Records marked `verification_sync` log situational Clang-Tidy, Cppcheck, or dirty benchmark findings. These tasks are handled by [`tactical_worker`](../../.agents/agents/tactical_worker/agent.json).
 
-### Autonomous triage mode
+### Autonomous net gain triage mode
 
-Use this prompt when delegating senior engineering judgment directly to the monitor. The monitor ranks candidates by `impact_score` and routes work to the right agent.
+Use this prompt when asking the monitor to execute positive net gain optimizations across the repository without new feature requirements.
 
-> "Act as the monitor supervisor. Review production_artifacts/manifest.json and triage refactor candidates using your senior judgment. Prioritize high impact items. Dispatch strategic_worker for topology or contract reorganizations, and dispatch tactical_worker for internal diagnostics, benchmarks, and header cleanups. Ensure each task passes verification before committing."
+> "Act as the monitor supervisor. Review advisory refactor_candidates telemetry in production_artifacts/manifest.json. Execute candidates with positive net_gain by dispatching strategic_worker for topology or public contract reorganizations and tactical_worker for internal diagnostics, benchmarks, and header cleanups. Verify every change through the appropriate verifier before committing."
 
-### Sovereign approval mode
+### Incremental requirement evolution with telemetry hints
 
-Use this prompt when you have reviewed [manifest.json](../../production_artifacts/manifest.json) manually and changed `user_directive` from `ignored` to `approved` on selected tickets.
+Use this prompt when adding new requirements after Version 1 so the strategic worker folds advisory telemetry notes into the active modification subgraph under the free rider rework discount.
 
-> "Act as the monitor supervisor. Review production_artifacts/manifest.json and execute all refactor candidates marked with user_directive approved. Dispatch the designated worker for each approved item, verify through the appropriate verifier, and commit upon pass."
+> "Act as the monitor supervisor. Review the updated requirements in requirements.md alongside the advisory refactor_candidates notes in production_artifacts/manifest.json. Dispatch strategic_worker to integrate the new requirements while folding in neighborhood telemetry hints and positive net_gain refactors. Verify with strategic_verifier and proceed with tactical worker waves."
 
-### Single ticket precision mode
+### Single candidate precision mode
 
-Use this prompt to resolve a specific candidate directly.
+Use this prompt when you want to force resolution of a specific telemetry note directly.
 
-> "Act as the monitor supervisor. Resolve refactor candidate REF-TOPO-item_proto-item_store from production_artifacts/manifest.json. Dispatch strategic_worker to consolidate the targets, verify with strategic_verifier, and commit once all invariant gates pass."
+> "Act as the monitor supervisor. Resolve advisory candidate REF-TOPO-item_proto-item_store from production_artifacts/manifest.json. Dispatch strategic_worker to consolidate the targets, verify with strategic_verifier, and commit once all invariant gates pass."
 
 ## Performance tuning and hardware PMU workflow
 

@@ -15,7 +15,6 @@ from typing import Any
 SCHEMA_VERSION = 1
 B_MAX_TOKENS = 16384
 ANCHOR_TARGETS = {"journal", "perf_scope", "journal_signal_adapter", "app"}
-VALID_DIRECTIVES = {"ignored", "approved"}
 VALID_CANDIDATE_KINDS = {
     "topology_repartition",
     "kernel_acceleration",
@@ -632,8 +631,31 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
             "vendor_toxicity": theta_load,
             "psi_sizing_score": psi_score,
             "subagent_model": subagent_model,
+            "rework_cost": 0.0,
             "pmu_metrics": pmu_summary,
         }
+
+    # Compute deterministic tactical rework cost C_rework per target
+    for name, tdata in targets_out.items():
+        self_rework = (tdata["private_tokens"] * tdata["psi_sizing_score"]) / 1000.0
+        downstream_rework = sum(
+            (
+                targets_out[cons]["private_tokens"]
+                * targets_out[cons]["psi_sizing_score"]
+                * 0.5
+            )
+            / 1000.0
+            for cons in tdata["consumer_targets"]
+            if cons in targets_out
+        )
+        bench_penalty = (
+            1.5
+            if tdata["has_benchmark"]
+            and tdata["private_tokens"] > 0
+            and tdata["pmu_metrics"] is not None
+            else 0.0
+        )
+        tdata["rework_cost"] = round(self_rework + downstream_rework + bench_penalty, 2)
 
     # Evaluate Hard Invariant Gates H1 - H5
     is_dag, cycle_nodes = check_acyclicity(target_names, all_edges)
@@ -733,7 +755,7 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
     )
     phi_total = round(c_scaffold + c_waste + c_blast + c_insulate, 2)
 
-    # Detect Refactor Candidates under the 4 generic enum types
+    # Detect advisory refactor telemetry notes under the 4 generic enum types
     candidates: list[dict[str, Any]] = []
 
     def make_candidate(
@@ -742,25 +764,29 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
         skill: str,
         cand_targets: list[str],
         impact_score: float,
+        benefit_score: float,
+        standalone_rework_cost: float,
         summary: str,
         metrics: dict[str, Any],
     ) -> dict[str, Any]:
         assert kind in VALID_CANDIDATE_KINDS
         prev_cand = existing_candidates.get(cid, {})
         discovered = prev_cand.get("discovered_at_commit", head_commit)
-        directive = prev_cand.get("user_directive", "ignored")
-        if directive not in VALID_DIRECTIVES:
-            directive = "ignored"
+        b_score = round(benefit_score, 2)
+        r_cost = round(standalone_rework_cost, 2)
+        net_gain = round(b_score - r_cost, 2)
         return {
             "id": cid,
             "kind": kind,
             "recommended_skill": skill,
             "targets": cand_targets,
             "impact_score": round(impact_score, 3),
+            "benefit_score": b_score,
+            "standalone_rework_cost": r_cost,
+            "net_gain": net_gain,
             "summary": summary,
             "metrics": metrics,
             "discovered_at_commit": discovered,
-            "user_directive": directive,
         }
 
     # 1. topology_repartition (2->1 contractions and 1->2 splits)
@@ -780,6 +806,7 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
                 delta_phi = round(10.0 - (tdata["vendor_toxicity"] * 0.5), 2)
                 if delta_phi > 0:
                     cid = f"REF-TOPO-{name}-{consumer}"
+                    rework = round(tdata["rework_cost"] + cons_data["rework_cost"], 2)
                     candidates.append(
                         make_candidate(
                             cid=cid,
@@ -787,6 +814,8 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
                             skill="architect",
                             cand_targets=[name, consumer],
                             impact_score=min(1.0, delta_phi / 12.0),
+                            benefit_score=delta_phi,
+                            standalone_rework_cost=rework,
                             summary=(
                                 f"2-to-1 contraction candidate: {name} has consumer_fan_out=1 into {consumer}. "
                                 f"Consolidating {name} into {consumer} eliminates scaffolding drag with delta_phi={delta_phi}."
@@ -805,6 +834,7 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
             or (len(tdata["helper_units"]) >= 2 and tdata["consumer_fan_out"] >= 2)
         ) and not tdata["is_anchor"]:
             cid = f"REF-TOPO-SPLIT-{name}"
+            split_benefit = round(tdata["context_saturation"] * 12.0, 2)
             candidates.append(
                 make_candidate(
                     cid=cid,
@@ -812,6 +842,8 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
                     skill="architect",
                     cand_targets=[name],
                     impact_score=tdata["context_saturation"],
+                    benefit_score=split_benefit,
+                    standalone_rework_cost=tdata["rework_cost"],
                     summary=(
                         f"1-to-2 split candidate: {name} has context_saturation={tdata['context_saturation']} "
                         f"across {tdata['consumer_fan_out']} consumers."
@@ -830,13 +862,17 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
         pmu = tdata["pmu_metrics"]
         if pmu is not None and pmu.get("directive") == "continue_optimizing":
             cid = f"REF-ACCEL-PMU-{name}"
+            imp = round(min(1.0, 0.50 + 0.10 * (1.0 / max(0.5, pmu["speedup_ratio"]))), 3)
+            local_rework = round((tdata["private_tokens"] * tdata["psi_sizing_score"]) / 1000.0, 2)
             candidates.append(
                 make_candidate(
                     cid=cid,
                     kind="kernel_acceleration",
                     skill="performance",
                     cand_targets=[name],
-                    impact_score=round(min(1.0, 0.50 + 0.10 * (1.0 / max(0.5, pmu["speedup_ratio"]))), 3),
+                    impact_score=imp,
+                    benefit_score=round(imp * 6.0, 2),
+                    standalone_rework_cost=local_rework,
                     summary=(
                         f"Hardware PMU report for {name} indicates directive=continue_optimizing "
                         f"with bottleneck={pmu['bottleneck']} and speedup={pmu['speedup_ratio']}x."
@@ -863,6 +899,8 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
                     skill="feature",
                     cand_targets=[name],
                     impact_score=0.45,
+                    benefit_score=round(0.45 * 10.0, 2),
+                    standalone_rework_cost=tdata["rework_cost"],
                     summary=(
                         f"Public header {name}.hpp includes heavy standard headers "
                         f"({', '.join(file_info['heavy_public_includes'])}) across {tdata['consumer_fan_out']} downstream callers."
@@ -885,6 +923,8 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
                 skill="resync",
                 cand_targets=[name],
                 impact_score=0.75,
+                benefit_score=3.75,
+                standalone_rework_cost=0.0,
                 summary=(
                     f"Benchmark report production_artifacts/profiling/{name}_score_report.json "
                     f"is missing or older than modified source files in targets/{name}/."
@@ -895,14 +935,19 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
 
     for name, warn_count in sorted(clang_tidy_counts.items()):
         if name in targets_out:
+            tdata = targets_out[name]
             cid = f"REF-SYNC-TIDY-{name}"
+            imp = round(min(1.0, 0.25 * warn_count), 3)
+            local_rework = round((tdata["private_tokens"] * tdata["psi_sizing_score"]) / 1000.0, 2)
             candidates.append(
                 make_candidate(
                     cid=cid,
                     kind="verification_sync",
                     skill="audit-static",
                     cand_targets=[name],
-                    impact_score=round(min(1.0, 0.25 * warn_count), 3),
+                    impact_score=imp,
+                    benefit_score=round(imp * 5.0, 2),
+                    standalone_rework_cost=local_rework,
                     summary=(
                         f"Component {name} has {warn_count} situational static analysis warning(s) "
                         f"logged in production_artifacts/clang_tidy_state.md."
@@ -913,14 +958,19 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
 
     for name, findings in sorted(cppcheck_data.items()):
         if name in targets_out and findings:
+            tdata = targets_out[name]
             cid = f"REF-CPPCHECK-{name}"
+            imp = round(min(1.0, 0.20 * len(findings)), 3)
+            local_rework = round((tdata["private_tokens"] * tdata["psi_sizing_score"]) / 1000.0, 2)
             candidates.append(
                 make_candidate(
                     cid=cid,
                     kind="verification_sync",
                     skill="audit-static",
                     cand_targets=[name],
-                    impact_score=round(min(1.0, 0.20 * len(findings)), 3),
+                    impact_score=imp,
+                    benefit_score=round(imp * 5.0, 2),
+                    standalone_rework_cost=local_rework,
                     summary=(
                         f"Cppcheck advisory scan identified {len(findings)} design suggestion(s) "
                         f"in targets/{name}/."
@@ -931,14 +981,19 @@ def build_manifest(repo_root: pathlib.Path) -> dict[str, Any]:
 
     for name, suggestions in sorted(iwyu_data.items()):
         if name in targets_out and suggestions:
+            tdata = targets_out[name]
             cid = f"REF-IWYU-{name}"
+            imp = round(min(1.0, 0.15 * len(suggestions)), 3)
+            local_rework = round((tdata["private_tokens"] * tdata["psi_sizing_score"]) / 1000.0, 2)
             candidates.append(
                 make_candidate(
                     cid=cid,
                     kind="contract_insulation",
                     skill="audit-static",
                     cand_targets=[name],
-                    impact_score=round(min(1.0, 0.15 * len(suggestions)), 3),
+                    impact_score=imp,
+                    benefit_score=round(imp * 5.0, 2),
+                    standalone_rework_cost=local_rework,
                     summary=(
                         f"Include-What-You-Use identified {len(suggestions)} header recommendation(s) "
                         f"in targets/{name}/."
@@ -998,12 +1053,6 @@ def main() -> int:
         help="Refuse to proceed and exit non-zero if git status has uncommitted changes.",
     )
     parser.add_argument(
-        "--set-directive",
-        nargs=2,
-        metavar=("CANDIDATE_ID", "DIRECTIVE"),
-        help="Set user_directive ('approved' or 'ignored') for a refactor candidate ID.",
-    )
-    parser.add_argument(
         "--install-git-hook",
         action="store_true",
         help="Install the Git pre-commit hook that runs sync_manifest.py --check.",
@@ -1022,27 +1071,6 @@ def main() -> int:
         return install_git_hook(repo_root)
 
     manifest = build_manifest(repo_root)
-
-    if args.set_directive:
-        cand_id, directive = args.set_directive
-        if directive not in VALID_DIRECTIVES:
-            print(
-                f"Error: directive must be one of {sorted(VALID_DIRECTIVES)}.",
-                file=sys.stderr,
-            )
-            return 1
-        matched = False
-        for cand in manifest["refactor_candidates"]:
-            if cand["id"] == cand_id:
-                cand["user_directive"] = directive
-                matched = True
-                break
-        if not matched:
-            print(
-                f"Error: candidate ID '{cand_id}' not found in refactor_candidates.",
-                file=sys.stderr,
-            )
-            return 1
 
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(

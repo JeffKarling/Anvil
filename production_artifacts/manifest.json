@@ -110,6 +110,7 @@
       "vendor_toxicity": 0,
       "psi_sizing_score": 0.2134,
       "subagent_model": "flash",
+      "rework_cost": 0.03,
       "pmu_metrics": null
     },
     "item_proto": {
@@ -139,6 +140,7 @@
       "vendor_toxicity": 0.85,
       "psi_sizing_score": 0.3007,
       "subagent_model": "flash",
+      "rework_cost": 0.04,
       "pmu_metrics": null
     },
     "item_store": {
@@ -165,6 +167,7 @@
       "vendor_toxicity": 0,
       "psi_sizing_score": 0.2172,
       "subagent_model": "flash",
+      "rework_cost": 1.59,
       "pmu_metrics": {
         "speedup_ratio": 1.091,
         "bottleneck": "hardware_saturated",
@@ -213,6 +216,7 @@
       "vendor_toxicity": 0.25,
       "psi_sizing_score": 0.5537,
       "subagent_model": "flash",
+      "rework_cost": 7.92,
       "pmu_metrics": {
         "speedup_ratio": 1.297,
         "bottleneck": "memory_bound",
@@ -252,6 +256,7 @@
       "vendor_toxicity": 0,
       "psi_sizing_score": 0.1255,
       "subagent_model": "flash",
+      "rework_cost": 0.11,
       "pmu_metrics": null
     },
     "perf_scope": {
@@ -277,6 +282,7 @@
       "vendor_toxicity": 0,
       "psi_sizing_score": 0.1748,
       "subagent_model": "flash",
+      "rework_cost": 0.55,
       "pmu_metrics": null
     },
     "tbb_transform": {
@@ -304,6 +310,7 @@
       "vendor_toxicity": 0.65,
       "psi_sizing_score": 0.3407,
       "subagent_model": "flash",
+      "rework_cost": 1.56,
       "pmu_metrics": {
         "speedup_ratio": 1.028,
         "bottleneck": "unknown_pmu_inactive",
@@ -391,6 +398,9 @@
         "item_store"
       ],
       "impact_score": 0.797,
+      "benefit_score": 9.57,
+      "standalone_rework_cost": 1.63,
+      "net_gain": 7.94,
       "summary": "2-to-1 contraction candidate: item_proto has consumer_fan_out=1 into item_store. Consolidating item_proto into item_store eliminates scaffolding drag with delta_phi=9.57.",
       "metrics": {
         "from_count": 2,
@@ -398,8 +408,7 @@
         "delta_phi": 9.57,
         "merged_context_tokens": 4762
       },
-      "discovered_at_commit": "586331abe8fc",
-      "user_directive": "ignored"
+      "discovered_at_commit": "586331abe8fc"
     },
     {
       "id": "REF-ACCEL-PMU-journal",
@@ -409,6 +418,9 @@
         "journal"
       ],
       "impact_score": 0.577,
+      "benefit_score": 3.46,
+      "standalone_rework_cost": 6.0,
+      "net_gain": -2.54,
       "summary": "Hardware PMU report for journal indicates directive=continue_optimizing with bottleneck=memory_bound and speedup=1.297x.",
       "metrics": {
         "bottleneck": "memory_bound",
@@ -417,8 +429,7 @@
         "ipc": 1.98,
         "cache_misses_per_op": 53.585
       },
-      "discovered_at_commit": "586331abe8fc",
-      "user_directive": "ignored"
+      "discovered_at_commit": "586331abe8fc"
     },
     {
       "id": "REF-INSULATE-HDR-journal_signal_adapter",
@@ -428,6 +439,9 @@
         "journal_signal_adapter"
       ],
       "impact_score": 0.45,
+      "benefit_score": 4.5,
+      "standalone_rework_cost": 0.11,
+      "net_gain": 4.39,
       "summary": "Public header journal_signal_adapter.hpp includes heavy standard headers (thread) across 1 downstream callers.",
       "metrics": {
         "heavy_headers": [
@@ -436,8 +450,7 @@
         "public_tokens": 310,
         "consumer_fan_out": 1
       },
-      "discovered_at_commit": "586331abe8fc",
-      "user_directive": "ignored"
+      "discovered_at_commit": "586331abe8fc"
     },
     {
       "id": "REF-SYNC-TIDY-journal",
@@ -447,12 +460,14 @@
         "journal"
       ],
       "impact_score": 0.5,
+      "benefit_score": 2.5,
+      "standalone_rework_cost": 6.0,
+      "net_gain": -3.5,
       "summary": "Component journal has 2 situational static analysis warning(s) logged in production_artifacts/clang_tidy_state.md.",
       "metrics": {
         "logged_warning_count": 2
       },
-      "discovered_at_commit": "586331abe8fc",
-      "user_directive": "ignored"
+      "discovered_at_commit": "586331abe8fc"
     },
     {
       "id": "REF-SYNC-TIDY-journal_signal_adapter",
@@ -462,12 +477,14 @@
         "journal_signal_adapter"
       ],
       "impact_score": 0.25,
+      "benefit_score": 1.25,
+      "standalone_rework_cost": 0.1,
+      "net_gain": 1.15,
       "summary": "Component journal_signal_adapter has 1 situational static analysis warning(s) logged in production_artifacts/clang_tidy_state.md.",
       "metrics": {
         "logged_warning_count": 1
       },
-      "discovered_at_commit": "586331abe8fc",
-      "user_directive": "ignored"
+      "discovered_at_commit": "586331abe8fc"
     },
     {
       "id": "REF-SYNC-TIDY-perf_scope",
@@ -477,12 +494,14 @@
         "perf_scope"
       ],
       "impact_score": 0.5,
+      "benefit_score": 2.5,
+      "standalone_rework_cost": 0.55,
+      "net_gain": 1.95,
       "summary": "Component perf_scope has 2 situational static analysis warning(s) logged in production_artifacts/clang_tidy_state.md.",
       "metrics": {
         "logged_warning_count": 2
       },
-      "discovered_at_commit": "586331abe8fc",
-      "user_directive": "ignored"
+      "discovered_at_commit": "586331abe8fc"
     },
     {
       "id": "REF-CPPCHECK-item_store",
@@ -492,12 +511,14 @@
         "item_store"
       ],
       "impact_score": 0.4,
+      "benefit_score": 2.0,
+      "standalone_rework_cost": 0.09,
+      "net_gain": 1.91,
       "summary": "Cppcheck advisory scan identified 2 design suggestion(s) in targets/item_store/.",
       "metrics": {
         "cppcheck_findings": 2
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-CPPCHECK-journal",
@@ -507,12 +528,14 @@
         "journal"
       ],
       "impact_score": 0.2,
+      "benefit_score": 1.0,
+      "standalone_rework_cost": 6.0,
+      "net_gain": -5.0,
       "summary": "Cppcheck advisory scan identified 1 design suggestion(s) in targets/journal/.",
       "metrics": {
         "cppcheck_findings": 1
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-CPPCHECK-journal_signal_adapter",
@@ -522,12 +545,14 @@
         "journal_signal_adapter"
       ],
       "impact_score": 0.4,
+      "benefit_score": 2.0,
+      "standalone_rework_cost": 0.1,
+      "net_gain": 1.9,
       "summary": "Cppcheck advisory scan identified 2 design suggestion(s) in targets/journal_signal_adapter/.",
       "metrics": {
         "cppcheck_findings": 2
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-CPPCHECK-perf_scope",
@@ -537,12 +562,14 @@
         "perf_scope"
       ],
       "impact_score": 0.2,
+      "benefit_score": 1.0,
+      "standalone_rework_cost": 0.55,
+      "net_gain": 0.45,
       "summary": "Cppcheck advisory scan identified 1 design suggestion(s) in targets/perf_scope/.",
       "metrics": {
         "cppcheck_findings": 1
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-CPPCHECK-tbb_transform",
@@ -552,12 +579,14 @@
         "tbb_transform"
       ],
       "impact_score": 0.2,
+      "benefit_score": 1.0,
+      "standalone_rework_cost": 0.06,
+      "net_gain": 0.94,
       "summary": "Cppcheck advisory scan identified 1 design suggestion(s) in targets/tbb_transform/.",
       "metrics": {
         "cppcheck_findings": 1
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-IWYU-app",
@@ -567,12 +596,14 @@
         "app"
       ],
       "impact_score": 0.15,
+      "benefit_score": 0.75,
+      "standalone_rework_cost": 0.03,
+      "net_gain": 0.72,
       "summary": "Include-What-You-Use identified 1 header recommendation(s) in targets/app/.",
       "metrics": {
         "iwyu_suggestions": 1
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-IWYU-item_proto",
@@ -582,12 +613,14 @@
         "item_proto"
       ],
       "impact_score": 0.15,
+      "benefit_score": 0.75,
+      "standalone_rework_cost": 0.0,
+      "net_gain": 0.75,
       "summary": "Include-What-You-Use identified 1 header recommendation(s) in targets/item_proto/.",
       "metrics": {
         "iwyu_suggestions": 1
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-IWYU-item_store",
@@ -597,12 +630,14 @@
         "item_store"
       ],
       "impact_score": 1.0,
+      "benefit_score": 5.0,
+      "standalone_rework_cost": 0.09,
+      "net_gain": 4.91,
       "summary": "Include-What-You-Use identified 7 header recommendation(s) in targets/item_store/.",
       "metrics": {
         "iwyu_suggestions": 7
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-IWYU-journal",
@@ -612,12 +647,14 @@
         "journal"
       ],
       "impact_score": 0.75,
+      "benefit_score": 3.75,
+      "standalone_rework_cost": 6.0,
+      "net_gain": -2.25,
       "summary": "Include-What-You-Use identified 5 header recommendation(s) in targets/journal/.",
       "metrics": {
         "iwyu_suggestions": 5
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-IWYU-journal_signal_adapter",
@@ -627,12 +664,14 @@
         "journal_signal_adapter"
       ],
       "impact_score": 0.75,
+      "benefit_score": 3.75,
+      "standalone_rework_cost": 0.1,
+      "net_gain": 3.65,
       "summary": "Include-What-You-Use identified 5 header recommendation(s) in targets/journal_signal_adapter/.",
       "metrics": {
         "iwyu_suggestions": 5
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     },
     {
       "id": "REF-IWYU-tbb_transform",
@@ -642,12 +681,14 @@
         "tbb_transform"
       ],
       "impact_score": 1.0,
+      "benefit_score": 5.0,
+      "standalone_rework_cost": 0.06,
+      "net_gain": 4.94,
       "summary": "Include-What-You-Use identified 7 header recommendation(s) in targets/tbb_transform/.",
       "metrics": {
         "iwyu_suggestions": 7
       },
-      "discovered_at_commit": "8b003ce6a1b5",
-      "user_directive": "ignored"
+      "discovered_at_commit": "8b003ce6a1b5"
     }
   ]
 }

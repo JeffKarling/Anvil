@@ -36,8 +36,9 @@ Good architecture is ultimately applied information theory. By strictly bounding
 
 ### Engineering manuals and prompt cookbooks
 
-* **[General engineering manual](doc/MANUAL.md).** Comprehensive systems manual covering ACCC mathematical graph synthesis, invariant gates $H_1$ through $H_5$, worker sizing scores $\Psi$, and dependency insulation.
-* **[Human prompt cookbook and workflows](doc/guides/prompts.md).** Tested prompt templates and workflows for greenfield project bootstrap, senior developer refactor review, hardware PMU benchmarking, and ad hoc git resynchronization.
+* **[General engineering manual](doc/MANUAL.md).** Comprehensive systems manual covering ACCC mathematical graph synthesis, invariant gates $H_1$ through $H_5$, worker sizing scores $\Psi$, deterministic net gain telemetry, and dependency insulation.
+* **[Human prompt cookbook and workflows](doc/guides/prompts.md).** Tested prompt templates and workflows for greenfield project bootstrap, autonomous refactor telemetry triage, hardware PMU benchmarking, and ad hoc git resynchronization.
+* **[Future multi provider delegation and tournament architecture](doc/future_delegation_architecture.md).** Architectural roadmap exploring external frontier APIs via A2A and UTCP, local Ollama worker routing, and deterministic multi agent tournament selection.
 * **[Anvil Template](https://github.com/JeffKarling/AnvilTemplate).** Cleaned starter blueprint stripped of exemplar components and documentation, preserving only the root prompt cheat sheet.
 
 ### Deep dive architectural articles

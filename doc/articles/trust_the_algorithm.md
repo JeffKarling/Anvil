@@ -26,7 +26,7 @@ Coarse libraries also force developers into harder after the fact C++ designs. W
 
 Healthy component boundaries are never a one time setup. Component selection and the DAG require ongoing adjustments throughout a project lifecycle as requirements shift. Humans rarely refactor component boundaries by hand because restructuring targets and headers across a live build graph is slow and error prone. Instead, teams patch aging coarse libraries with advanced C++ indirection to work around passing an oversized subsystem into a small consumer.
 
-Anvil makes continuous architectural refactoring practical through ongoing algorithmic calculations using pure mathematics. Throughout the project lifecycle, the system continuously evaluates the live graph in [production_artifacts/manifest.json](../../production_artifacts/manifest.json) and surfaces deterministic merge or split opportunities so humans can approve refactors as requirements evolve.
+Anvil makes continuous architectural refactoring practical through ongoing algorithmic calculations using pure mathematics. Throughout the project lifecycle, the system continuously evaluates the live graph in [production_artifacts/manifest.json](../../production_artifacts/manifest.json) and records deterministic merge, split, and insulation telemetry notes so strategic and tactical workers can weigh structural net gain against rework cost as requirements evolve.
 
 ## Mathematical topology over subjective taxonomy
 

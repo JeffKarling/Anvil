@@ -1,8 +1,8 @@
 # How Anvil verifiers compare to Swarm
 
-In a community update on Reddit, the Google Antigravity team summarized the motivation behind the Swarm feature. Previously, developers could spin up many agents and subagents within Antigravity, but they rarely played nicely together. Swarm changed that dynamic by coordinating multiple agents to meet user prompts in a shared conversational space.
+Google Antigravity team recently launched Swarm, an AI-driven platform that enables developers to coordinate multiple agents to meet user prompts in a shared conversational space. Previously, developers could spin up many agents and subagents within Antigravity, but they rarely played nicely together. Swarm changed that dynamic by coordinating multiple agents to meet user prompts in a shared conversational space.
 
-Both Swarm and Anvil tackle the same fundamental challenge of multi-agent software development. Complex engineering projects quickly overwhelm a single model. Solving large problems requires multiple specialized agents working in concert.
+Both Swarm and Anvil tackle the same fundamental challenge of multi-agent software development. Complex engineering projects quickly overwhelm a single model. Solving large problems requires multiple specialized agents working simultaneously on different parts of the project.
 
 However, Anvil and Swarm take opposing paths to coordinate agents. Swarm coordinates agents through a shared conversational feed. Anvil achieves adversarial verification by structuring agents around physical component boundaries.
 
@@ -12,27 +12,27 @@ In a conversational swarm, multiple agents share a single message thread. One ag
 
 This conversational model excels at open-ended discovery. When exploring vague requirements or brainstorming user interface ideas, natural language debate helps models reach consensus. The agents see each other's reasoning and refine their ideas together.
 
-In systems C++, however, a shared conversational feed encounters three severe physical bottlenecks.
+In C++ systems, a shared conversational feed encounters three severe physical bottlenecks.
 
-**Quadratic token explosion.** As agents converse in a shared channel, the transcript grows with every turn. Because all agents read the common history, every message multiplies across the context window of every active model. Token consumption scales quadratically, quickly consuming reasoning budgets on social banter rather than code.
+* **Quadratic token explosion.** As agents converse in a shared channel, the transcript grows with every turn. Because all agents read the common history, every message multiplies across the context window of every active model. Token consumption scales quadratically, quickly consuming reasoning budgets on social banter rather than code.
 
-**Social consensus versus compiler reality.** Large language models are trained to be agreeable. In a shared chat room, conversational debate can converge on plausible compromises that still fail in the physical world. An agent may convince its peers that an algorithm is sound, yet the code contains data races, cache thrashing, or undefined pointer behavior. Conversational consensus cannot replace mechanical compiler verification.
+* **Social consensus versus compiler reality.** Large language models are trained to be agreeable. In a shared chat room, conversational debate can converge on plausible compromises that still fail in the physical world. An agent may convince its peers that an algorithm is sound, yet the code contains data races, cache thrashing, or undefined pointer behavior. Conversational consensus cannot replace mechanical compiler verification.
 
-**Workspace collision.** When multiple agents attempt to modify the same repository without physical boundaries, they risk editing overlapping files. Diff reconciliation in a single workspace creates merge conflicts and pollutes version control history.
+* **Workspace collision.** When multiple agents attempt to modify the same repository without physical boundaries, they risk editing overlapping files. Diff reconciliation in a single workspace creates merge conflicts and pollutes version control history.
 
 ## Physical target boundaries as an audit firewall
 
-Anvil replaces conversational chat rooms with physical component boundaries rooted in John Lakos software architecture. Instead of placing agents in a shared room, Anvil isolates them inside discrete translation units.
+Anvil uses component boundaries as an audit firewall rooted in John Lakos software architecture design. Instead of placing agents in a shared room, Anvil isolates agents to a discrete workspace each matching a physical location.
 
 Every component in Anvil occupies a physical directory under `targets/<name>/`. Components publish clean public contracts in `targets/<name>/<name>/<name>.hpp` and hide private translation units inside `targets/<name>/<name>.cpp`.
 
 This physical separation transforms how agents collaborate across three fundamental dimensions.
 
-**Bounded context locality.** A [tactical_worker](../../.agents/agents/tactical_worker/agent.json) never reads a running chat feed of what other workers are doing. It loads only its assigned directory and the public headers of direct upstream dependencies. Total worker context remains bounded within $B_{\max} = 16384$ tokens. Ten workers can run in parallel without multiplying token overhead across each other.
+* **Bounded context locality.** A [tactical_worker](../../.agents/agents/tactical_worker/agent.json) never reads a running chat feed of what other workers are doing. It loads only its assigned directory and the public headers of direct upstream dependencies. Total worker context remains bounded within $B_{\max} = 16384$ tokens. Ten workers can run in parallel without multiplying token overhead across each other.
 
-**Isolated shared worktrees.** Antigravity provisions workers in isolated Git worktrees branched from `HEAD`. Because each worker operates in a separate physical filesystem directory, parallel agents never collide on files or produce merge conflicts.
+* **Isolated shared worktrees.** Antigravity provisions workers in isolated Git worktrees branched from `HEAD`. Because each worker operates in a separate physical filesystem directory, parallel agents never collide on files or produce merge conflicts.
 
-**Adversarial verification without social bias.** In Anvil, verification is adversarial and unyielding. The [tactical_verifier](../../.agents/agents/tactical_verifier/agent.json) never debates the worker. It inspects the candidate diff from a clean, read only perspective. It checks whether unit test assertions were diluted, whether mocks were introduced to bypass real hardware, and whether benchmark workloads were gamed.
+* **Adversarial verification without social bias.** In Anvil, verification is adversarial and unyielding. The [tactical_verifier](../../.agents/agents/tactical_verifier/agent.json) never debates the worker. It inspects the candidate diff from a clean, read only perspective. It checks whether unit test assertions were diluted, whether mocks were introduced to bypass real hardware, and whether benchmark workloads were gamed.
 
 ## Compilers and hardware as the ultimate arbiters
 

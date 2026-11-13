@@ -18,7 +18,7 @@ python3 .agents/skills/architect/scripts/sync_manifest.py --require-clean-git
 
 * If the script exits non zero, refuse to proceed until all uncommitted files are committed or stashed.
 * Review [cmake/dependencies.cmake](../../../cmake/dependencies.cmake) and [manifest.json](../../../production_artifacts/manifest.json) before delegating work.
-* Inspect refactor candidates in [manifest.json](../../../production_artifacts/manifest.json). Execute any topology repartition candidate marked approved by the user.
+* Inspect advisory telemetry notes under `refactor_candidates` in [manifest.json](../../../production_artifacts/manifest.json). Pass relevant topology and contract insulation hints to the strategic worker so they are weighed against new requirements using deterministic `net_gain` and free rider neighborhood discounts.
 * Clarify ambiguous input types, contracts, or failure modes with the user before dispatching the strategic worker.
 
 ## Step 2. Dispatch strategic worker to partition capabilities and scaffold targets
@@ -33,7 +33,7 @@ Dispatch the strategic worker subagent to group capabilities into physical targe
       "Role": "Strategic Architect",
       "Model": "pro",
       "Workspace": "inherit",
-      "Prompt": "Translate requirements into physical targets under targets/. Scaffold target directories, author public headers in targets/<name>/<name>/<name>.hpp, author error catalogs in targets/<name>/<name>.catalog, configure targets/<name>/CMakeLists.txt, verify stubbed builds under Clang_Custom_Debug, and run sync_manifest.py --check. Report completion back to monitor."
+      "Prompt": "Translate requirements into physical targets under targets/ while weighing advisory refactor_candidates telemetry in production_artifacts/manifest.json. Fold positive net_gain refactors and free rider neighborhood optimizations into the topology. Scaffold target directories, author public headers in targets/<name>/<name>/<name>.hpp, author error catalogs in targets/<name>/<name>.catalog, configure targets/<name>/CMakeLists.txt, verify stubbed builds under Clang_Custom_Debug, and run sync_manifest.py --check. Report completion back to monitor."
     }
   ]
 }
