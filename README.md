@@ -47,7 +47,7 @@ Good architecture is ultimately applied information theory. By strictly bounding
 * **[The Protobuf pedagogic example](doc/articles/protobuf_pedagogic_example.md).** Case study demonstrating why splitting single consumer schemas causes scaffolding drag.
 * **[Verification philosophy in agentic physical design](doc/articles/tactical_and_strategic_verifiers.md).** Adversarial verification, independent auditors, and preventing reward hacking in parallel subagents.
 * **[Compiler boundaries over prompt rule bloat](doc/articles/compiler_boundaries_over_prompt_rules.md).** Replacing fragile prompt rules with physical compiler walls while adapting to accelerating model release velocity.
-* **[How Anvil verifiers compare to Swarm](doc/articles/how_anvils_verifiers_compare_to_swarm.md).** Physical target verification versus shared conversational feeds in multi agent systems.
+* **[Anvil versus built in Antigravity tools](doc/articles/anvil_versus_built_in_antigravity_tools.md).** Physical architecture and adversarial verification versus built in model routing and conversational swarms.
 * **[The 16384 token ceiling in physical component design](doc/articles/the_16384_token_ceiling.md).** Information theory, attention degradation, and binary power sizing in agentic context windows.
 
 ## License
