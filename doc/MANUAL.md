@@ -57,7 +57,7 @@ pkg_check_modules(curl GLOBAL QUIET IMPORTED_TARGET libcurl)
 pkg_check_modules(eigen3 GLOBAL QUIET IMPORTED_TARGET eigen3)
 ```
 
-All entries in [cmake/dependencies.cmake](../cmake/dependencies.cmake) use `QUIET` discovery by default. This minimizes configuration noise and allows a greenfield project to initialize and run even when nothing exists apart from a main function. Listing a library with `QUIET` signals that the dependency is pre approved for use. Conversely, when you explicitly change a dependency to `REQUIRED`, that serves as a strong directive telling the orchestrator that the library must be enabled and integrated into the design.
+All entries in [cmake/dependencies.cmake](../cmake/dependencies.cmake) define the approved third party library palette. Listing a library establishes a permission boundary that authorizes agents to use it if needed. Entries use `QUIET` discovery by default to minimize configuration noise during greenfield initialization. Changing a dependency to `REQUIRED` instructs CMake to halt build configuration if the host environment lacks the package. The presence of a library in the palette does not mandate its usage in code. The contraction algorithm and strategic workers decide whether to link an approved library based on domain requirements, capability vectors, and partition friction.
 
 Behind the scenes, workers link imported library targets strictly `PRIVATE`. They keep `targets/<name>/<name>/<name>.hpp` completely free of third party headers so vendor upgrades never trigger downstream rebuilds or bloat caller context.
 

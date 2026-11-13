@@ -3,7 +3,7 @@ include_guard(GLOBAL)
 find_package(PkgConfig GLOBAL QUIET)
 
 # Approved third party library palette with quiet discovery by default to minimize noise and allow greenfield initialization.
-# Marking a dependency REQUIRED signals a mandatory architectural requirement from the human engineer.
+# Setting REQUIRED instructs CMake to halt configuration if the host environment lacks the package.
 # Each entry carries an @anvil_toxicity weight in [0.0, 1.0] for ACCC vendor insulation and Psi subagent sizing.
 
 # @anvil_toxicity: libsystemd = 0.25

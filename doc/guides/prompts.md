@@ -8,7 +8,7 @@ When starting a project from scratch, human engineers focus on boundaries and ap
 
 ### Curing approved dependencies
 
-Populate [cmake/dependencies.cmake](../../cmake/dependencies.cmake) with candidate libraries for your domain. Use `QUIET` so uninstalled packages do not block builds. Use `REQUIRED` only when a package must be present.
+Populate [cmake/dependencies.cmake](../../cmake/dependencies.cmake) with candidate libraries for your domain. Use `QUIET` so uninstalled candidate packages do not block builds. Use `REQUIRED` when the package must be present in the host environment.
 
 ### Writing high level requirements
 
