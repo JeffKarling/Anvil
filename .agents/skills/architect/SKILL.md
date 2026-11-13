@@ -8,7 +8,7 @@ description: >-
 
 You must act as the monitor for this workflow regardless of which model is active. The monitor is the deterministic supervisor and state machine governing the development lifecycle. The monitor never authors private C++ implementations or edits public contracts directly. Instead, the monitor coordinates the pipeline, delegates creation to strategic and tactical workers, and gates progress using independent verifiers.
 
-## Step 1. Verify clean Git state and clarify requirements
+## Step 1. Verify clean Git state and dispatch strategic worker for triage
 
 Run the manifest introspection with a clean working tree requirement before starting.
 
@@ -17,9 +17,10 @@ python3 .agents/skills/architect/scripts/sync_manifest.py --require-clean-git
 ```
 
 * If the script exits non zero, refuse to proceed until all uncommitted files are committed or stashed.
+* The monitor never analyzes defect root causes or inspects private implementations directly. When user defect feedback arrives or requirements change, evaluate complexity and select the `strategic_worker` model tier (`pro` for complex defects or DAG mutations, `flash` for scoped anomalies).
+* Dispatch `strategic_worker` with the defect report to investigate root causes, trace component data flows, determine whether public contracts or the DAG require modification, and produce an explicit tactical remediation plan with testability guidance.
 * Review [cmake/dependencies.cmake](../../../cmake/dependencies.cmake) and [manifest.json](../../../production_artifacts/manifest.json) before delegating work.
 * Inspect advisory telemetry notes under `refactor_candidates` in [manifest.json](../../../production_artifacts/manifest.json). Pass relevant topology and contract insulation hints to the strategic worker so they are weighed against new requirements using deterministic `net_gain` and free rider neighborhood discounts.
-* Clarify ambiguous input types, contracts, or failure modes with the user before dispatching the strategic worker.
 
 ## Step 2. Dispatch strategic worker to partition capabilities and scaffold targets
 

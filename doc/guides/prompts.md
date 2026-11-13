@@ -58,6 +58,12 @@ Use this prompt when you want to force resolution of a specific telemetry note d
 
 > "Act as the monitor supervisor. Resolve advisory candidate REF-TOPO-item_proto-item_store from production_artifacts/manifest.json. Dispatch strategic_worker to consolidate the targets, verify with strategic_verifier, and commit once all invariant gates pass."
 
+### Defect triage and remediation mode
+
+Use this prompt when reporting bug or defect feedback so the strategic worker conducts root cause analysis and establishes testability boundaries before tactical waves begin.
+
+> "Act as the monitor supervisor. I found a defect: <DEFECT_DESCRIPTION>. Dispatch strategic_worker to investigate the root cause, determine required DAG or public contract modifications, and produce a tactical remediation plan with testability boundaries. Verify any contract anchor with strategic_verifier before proceeding with tactical worker waves."
+
 ## Performance tuning and hardware PMU workflow
 
 Algorithmic components with `<name>BENCH` suites generate structured hardware counter reports in `production_artifacts/profiling/`.
