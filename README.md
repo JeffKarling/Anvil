@@ -49,6 +49,7 @@ Good architecture is ultimately applied information theory. By strictly bounding
 * **[Compiler boundaries over prompt rule bloat](doc/articles/compiler_boundaries_over_prompt_rules.md).** Replacing fragile prompt rules with physical compiler walls while adapting to accelerating model release velocity.
 * **[Anvil versus built in Antigravity tools](doc/articles/anvil_versus_built_in_antigravity_tools.md).** Physical architecture and adversarial verification versus built in model routing and conversational swarms.
 * **[The 16384 token ceiling in physical component design](doc/articles/the_16384_token_ceiling.md).** Information theory, attention degradation, and binary power sizing in agentic context windows.
+* **[Strategic architecture over tactical shortcuts](doc/articles/strategic_architecture_over_tactical_shortcuts.md).** Overcoming the natural gravity of tactical shortcuts through strategic triage, contract insulation, and headless testability.
 
 ## License
 
