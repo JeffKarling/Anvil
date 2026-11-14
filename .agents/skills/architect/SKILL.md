@@ -17,7 +17,8 @@ python3 .agents/skills/architect/scripts/sync_manifest.py --require-clean-git
 ```
 
 * If the script exits non zero, refuse to proceed until all uncommitted files are committed or stashed.
-* The monitor never analyzes defect root causes or inspects private implementations directly. When user defect feedback arrives or requirements change, evaluate complexity and select the `strategic_worker` model tier (`pro` for complex defects or DAG mutations, `flash` for scoped anomalies).
+* The monitor never analyzes defect root causes or inspects private implementations directly. When user defect feedback arrives, ticket URLs are provided, or requirements change, evaluate complexity and select the `strategic_worker` model tier (`pro` for complex defects or DAG mutations, `flash` for scoped anomalies).
+* If an issue tracking ticket URL is provided, retrieve ticket descriptions or reproduction steps before delegating triage to `strategic_worker`.
 * Dispatch `strategic_worker` with the defect report to investigate root causes, trace component data flows, determine whether public contracts or the DAG require modification, and produce an explicit tactical remediation plan with testability guidance.
 * Review [cmake/dependencies.cmake](../../../cmake/dependencies.cmake) and [manifest.json](../../../production_artifacts/manifest.json) before delegating work.
 * Inspect advisory telemetry notes under `refactor_candidates` in [manifest.json](../../../production_artifacts/manifest.json). Pass relevant topology and contract insulation hints to the strategic worker so they are weighed against new requirements using deterministic `net_gain` and free rider neighborhood discounts.
@@ -106,3 +107,5 @@ python3 .agents/skills/architect/scripts/sync_manifest.py --check
 ```
 
 Dispatch `strategic_verifier` via `invoke_subagent` to confirm all five invariant gates $H_1$ through $H_5$ pass and zero dirty benchmarks remain.
+
+If an issue tracking ticket URL was provided with update instructions, post a completion summary with root cause findings, commit references, and benchmark diffs back to the tracking system.

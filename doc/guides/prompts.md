@@ -1,72 +1,76 @@
-# Human prompt cookbook and lifecycle workflows
+# Human prompt cookbook and workflows
 
-This guide provides tested prompts and interaction protocols for human engineers directing Google Antigravity. It organizes interactions around four distinct operational phases across the Anvil lifecycle.
+This guide provides tested prompts and interaction protocols for human engineers directing Google Antigravity.
 
-## Greenfield project bootstrap workflow
+Daily interaction with Anvil centers on standard software engineering directives such as implementing new capabilities, modifying existing behavior, or fixing defects. Beyond standard feature development, Anvil introduces two specialized workflows. The first optimizes physical architecture using advisory telemetry from [manifest.json](../../production_artifacts/manifest.json). The second resynchronizes project telemetry and validation gates after manual code edits.
 
-When starting a project from scratch, human engineers focus on boundaries and approved building blocks rather than internal C++ mechanics.
+## Project boundaries and requirements
 
-### Curing approved dependencies
+Human engineers define requirements and external building blocks rather than micromanaging low level C++ mechanics.
 
-Populate [cmake/dependencies.cmake](../../cmake/dependencies.cmake) with candidate libraries for your domain. Use `QUIET` so uninstalled candidate packages do not block builds. Use `REQUIRED` when the package must be present in the host environment.
+### Approved dependencies
+
+Populate [cmake/dependencies.cmake](../../cmake/dependencies.cmake) with candidate libraries for your domain. Use `QUIET` so uninstalled packages do not block builds. Use `REQUIRED` when the package must be present in the host environment. If an approved third party library is missing from the host system, the agent can assist in installing it automatically.
 
 ### Writing high level requirements
 
-Create a specification file such as `requirements.md` in the project root. Describe external system boundaries, streaming data flows, and domain numerical precision. Do not prescribe class names, private headers, or low level C++ signatures.
+Create a specification file such as `requirements.md` in the project root. Requirements should stay at a higher level of abstraction than traditional C++ specifications. Frontier models excel at reading domain goals and filling in between the lines. Prescribing class names, private methods, or specific syntax in requirements restricts model reasoning. Focus instead on system capabilities, external boundaries, expected data flows, and precision constraints. The strategic architect will synthesize the physical component decomposition and clean interfaces automatically.
 
-### Host and git hygiene
+### Clean working tree requirement
 
-Verify that git is clean before initiating orchestration. Uncommitted files cannot be seen by worker subagents running in isolated worktrees.
+The orchestrator requires a clean git status before starting any task. Worker subagents operate in isolated git worktrees and cannot see uncommitted changes. The supervisor inspects git status at startup and will refuse to start if uncommitted files exist. Commit or stash any local modifications before issuing prompts.
 
-```bash
-python3 .agents/skills/architect/scripts/sync_manifest.py --require-clean-git
-```
+## Feature development and defect remediation
 
-### Initial architecture prompt
+Directing the orchestrator to build new capabilities or modify existing components uses the same declarative prompt regardless of project age. Initial bootstrapping and ongoing evolution follow the same lifecycle.
 
-Use this prompt to instruct [`monitor`](../../.agents/agents/monitor/agent.json) to partition the DAG, scaffold components, and launch implementation waves.
+### Implementing requirements
 
-> "Act as the monitor supervisor. Review requirements in requirements.md and approved dependencies in cmake/dependencies.cmake. Dispatch strategic_worker to partition capabilities into physical targets, author public headers and error catalogs, and configure CMakeLists.txt. Verify the contract anchor with strategic_verifier, commit once invariant gates H1 through H5 pass, and proceed with tactical worker waves."
+Use this prompt to instruct [`monitor`](../../.agents/agents/monitor/agent.json) to implement domain specifications across the repository.
+
+> "Act as the monitor supervisor. Implement the requirements in requirements.md."
+
+### Remediating defects
+
+Use this prompt when reporting bug or defect feedback so the supervisor conducts root cause analysis and establishes testability boundaries.
+
+> "Act as the monitor supervisor. Remediate this defect: <DEFECT_DESCRIPTION>."
+
+Engineers can also point the supervisor directly to an issue ticket URL in an external tracking system.
+
+> "Act as the monitor supervisor. Remediate the defect described at https://github.com/organization/repository/issues/142."
+
+When provided with update instructions or access tools, the supervisor can post remediation summaries and benchmark diffs back to the tracker upon completion.
+
+> "Act as the monitor supervisor. Remediate the issue at https://github.com/organization/repository/issues/142 and update the ticket with root cause findings and benchmark diffs."
 
 ## Autonomous refactor telemetry workflow
 
-Anvil shifts architectural maintenance away from line by line diff inspection and manual ticket approval toward continuous telemetry in [manifest.json](../../production_artifacts/manifest.json). The manifest records advisory `refactor_candidates` notes under four distinct kinds alongside their deterministic `benefit_score`, `standalone_rework_cost`, and `net_gain`.
+When workers implement features, they enforce hard invariant gates H1 through H5 immediately. Secondary opportunities such as situational linter warnings, topology contractions, and hardware PMU headroom are recorded as advisory notes in [manifest.json](../../production_artifacts/manifest.json) rather than executed right away. Deferring secondary optimizations prevents scope creep and keeps feature commit diffs small.
 
-**Topology notes.** Records marked `topology_repartition` indicate single consumer fan out contractions or high context saturation splits. These tasks are evaluated by [`strategic_worker`](../../.agents/agents/strategic_worker/agent.json) against incoming requirements and net gain thresholds.
+When new requirements touch those components later, the strategic worker folds the refactors in automatically at near zero marginal rework cost. If components remain untouched in quiet subgraphs, human engineers can trigger a dedicated technical debt cleanup pass using the prompts below. A detailed explanation of metrics, gates, and candidate scoring is available in [manifest.md](manifest.md).
 
-**Kernel acceleration notes.** Records marked `kernel_acceleration` highlight PMU bottlenecks where hardware counters indicate further optimization is viable. These tasks are handled by [`tactical_worker`](../../.agents/agents/tactical_worker/agent.json).
+### Executing positive net gain refactors
 
-**Contract insulation notes.** Records marked `contract_insulation` identify public headers pulling in heavy standard headers or uninsulated includes. These tasks are handled by [`strategic_worker`](../../.agents/agents/strategic_worker/agent.json) or [`tactical_worker`](../../.agents/agents/tactical_worker/agent.json).
+Use this prompt to run a standalone maintenance pass across untouched components without adding new feature requirements.
 
-**Verification sync notes.** Records marked `verification_sync` log situational Clang-Tidy, Cppcheck, or dirty benchmark findings. These tasks are handled by [`tactical_worker`](../../.agents/agents/tactical_worker/agent.json).
+> "Act as the monitor supervisor. Execute all advisory refactor candidates with positive net gain."
 
-### Autonomous net gain triage mode
+### Incremental requirements with telemetry hints
 
-Use this prompt when asking the monitor to execute positive net gain optimizations across the repository without new feature requirements.
+Use this prompt when adding requirements to an existing codebase so the supervisor folds advisory telemetry into active modification subgraphs under the free rider discount.
 
-> "Act as the monitor supervisor. Review advisory refactor_candidates telemetry in production_artifacts/manifest.json. Execute candidates with positive net_gain by dispatching strategic_worker for topology or public contract reorganizations and tactical_worker for internal diagnostics, benchmarks, and header cleanups. Verify every change through the appropriate verifier before committing."
+> "Act as the monitor supervisor. Implement the updated requirements in requirements.md and fold in relevant refactor telemetry."
 
-### Incremental requirement evolution with telemetry hints
+### Resolving specific candidates
 
-Use this prompt when adding new requirements after Version 1 so the strategic worker folds advisory telemetry notes into the active modification subgraph under the free rider rework discount.
+Use this prompt to force resolution of a single telemetry note directly.
 
-> "Act as the monitor supervisor. Review the updated requirements in requirements.md alongside the advisory refactor_candidates notes in production_artifacts/manifest.json. Dispatch strategic_worker to integrate the new requirements while folding in neighborhood telemetry hints and positive net_gain refactors. Verify with strategic_verifier and proceed with tactical worker waves."
+> "Act as the monitor supervisor. Resolve advisory refactor candidate REF-TOPO-item_proto-item_store."
 
-### Single candidate precision mode
+## Performance benchmarking workflow
 
-Use this prompt when you want to force resolution of a specific telemetry note directly.
-
-> "Act as the monitor supervisor. Resolve advisory candidate REF-TOPO-item_proto-item_store from production_artifacts/manifest.json. Dispatch strategic_worker to consolidate the targets, verify with strategic_verifier, and commit once all invariant gates pass."
-
-### Defect triage and remediation mode
-
-Use this prompt when reporting bug or defect feedback so the strategic worker conducts root cause analysis and establishes testability boundaries before tactical waves begin.
-
-> "Act as the monitor supervisor. I found a defect: <DEFECT_DESCRIPTION>. Dispatch strategic_worker to investigate the root cause, determine required DAG or public contract modifications, and produce a tactical remediation plan with testability boundaries. Verify any contract anchor with strategic_verifier before proceeding with tactical worker waves."
-
-## Performance tuning and hardware PMU workflow
-
-Algorithmic components with `<name>BENCH` suites generate structured hardware counter reports in `production_artifacts/profiling/`.
+Algorithmic components generate structured hardware counter reports in `production_artifacts/profiling/`.
 
 ### Host environment preparation
 
@@ -77,24 +81,24 @@ sudo sysctl kernel.perf_event_paranoid=1
 powerprofilesctl set performance
 ```
 
-### Benchmark optimization prompt
+### Optimizing performance bottlenecks
 
 Use this prompt to execute benchmark suites and optimize detected bottlenecks.
 
-> "Act as the monitor supervisor. Profile algorithmic targets using their performance benchmarks. Run benchmark presets, inspect production_artifacts/profiling reports, and dispatch tactical_worker to optimize kernels marked with continue_optimizing. Verify with tactical_verifier and confirm speedup ratios."
+> "Act as the monitor supervisor. Benchmark algorithmic components and optimize detected bottlenecks."
 
-### Dependency exploration prompt
+### Exploring external libraries
 
 Use this prompt to ask the orchestrator if external libraries could replace bespoke computation.
 
-> "Analyze component performance telemetry across the project. Are there any additional third party libraries that can accelerate memory bound or compute bound bottlenecks, and which packages should I add to cmake/dependencies.cmake?"
+> "Analyze component performance telemetry across the project. Which external libraries could accelerate current memory or compute bottlenecks?"
 
-## Ad hoc manual edits and resync workflow
+## Manual edits and resync workflow
 
-When you edit code manually in an IDE, local telemetry and benchmark reports become dirty.
+When code is edited manually in an IDE, local telemetry and benchmark reports become dirty.
 
 ### Resynchronization prompt
 
-Use this prompt to reconcile project state before handing control back to the monitor.
+Use this prompt to reconcile project state after manual edits before continuing orchestration.
 
-> "I made manual edits in targets. Act as the monitor supervisor and run the resync skill. Rebuild the components, refresh production_artifacts/manifest.json, run fast invariant gates H1 through H5, and ensure dirty benchmark reports are updated before committing."
+> "I made manual edits in components. Resynchronize the project."
