@@ -38,18 +38,19 @@ Good architecture is ultimately applied information theory. By strictly bounding
 
 * **[General engineering manual](doc/MANUAL.md).** Comprehensive systems manual covering ACCC mathematical graph synthesis, invariant gates $H_1$ through $H_5$, worker sizing scores $\Psi$, deterministic net gain telemetry, and dependency insulation.
 * **[Human prompt cookbook and workflows](doc/guides/prompts.md).** Tested prompt templates and workflows for greenfield project bootstrap, autonomous refactor telemetry triage, hardware PMU benchmarking, and ad hoc git resynchronization.
-* **[Future multi provider delegation and tournament architecture](doc/future_delegation_architecture.md).** Architectural roadmap exploring external frontier APIs via A2A and UTCP, local Ollama worker routing, and deterministic multi agent tournament selection.
 * **[Anvil Template](https://github.com/JeffKarling/AnvilTemplate).** Cleaned starter blueprint stripped of exemplar components and documentation, preserving only the root prompt cheat sheet.
 
 ### Deep dive architectural articles
 
-* **[Trust the algorithm in systems architecture](doc/articles/trust_the_algorithm.md).** Discrete mathematical partitioning versus human narrative taxonomy in AI system design.
-* **[The Protobuf pedagogic example](doc/articles/protobuf_pedagogic_example.md).** Case study demonstrating why splitting single consumer schemas causes scaffolding drag.
+* **[Trust the algorithm in systems architecture](doc/articles/trust_the_algorithm.md).** Discrete mathematical partitioning versus human narrative taxonomy in AI driven projects.
+* **[The Protobuf pedagogic example](doc/articles/protobuf_pedagogic_example.md).** Case study demonstrating when not trusting the algorithm causes scaffolding drag.
 * **[Verification philosophy in agentic physical design](doc/articles/tactical_and_strategic_verifiers.md).** Adversarial verification, independent auditors, and preventing reward hacking in parallel subagents.
-* **[Compiler boundaries over prompt rule bloat](doc/articles/compiler_boundaries_over_prompt_rules.md).** Replacing fragile prompt rules with physical compiler walls while adapting to accelerating model release velocity.
-* **[Anvil versus built in Antigravity tools](doc/articles/anvil_versus_built_in_antigravity_tools.md).** Physical architecture and adversarial verification versus built in model routing and conversational swarms.
-* **[The 16384 token ceiling in physical component design](doc/articles/the_16384_token_ceiling.md).** Information theory, attention degradation, and binary power sizing in agentic context windows.
-* **[Strategic architecture over tactical shortcuts](doc/articles/strategic_architecture_over_tactical_shortcuts.md).** Overcoming the natural gravity of tactical shortcuts through strategic triage, contract insulation, and headless testability.
+* **[Compiler boundaries over prompt rule bloat](doc/articles/compiler_boundaries_over_prompt_rules.md).** How physical component design and strict tooling boundaries accelerate engineering velocity.
+* **[Anvil versus built in Antigravity tools](doc/articles/anvil_versus_built_in_antigravity_tools.md).** Anvil versus Antigravity built in tooling.
+* **[The 16384 token ceiling in physical component design](doc/articles/the_16384_token_ceiling.md).** Information theory and attention degradation in agentic context windows.
+* **[Strategic architecture over tactical shortcuts](doc/articles/strategic_architecture_over_tactical_shortcuts.md).** Strategic before tactical improves agentic engineering velocity.
+* **[The symmetry of addition and deletion in software architecture](doc/articles/the_symmetry_of_addition_and_deletion.md).** Adding and removing features is finally complexity symmetrical.
+* **[Journal performance and architectural comparison](doc/articles/journal_performance_comparison.md).** Built journal log lib is fast and efficient.
 
 ## License
 
